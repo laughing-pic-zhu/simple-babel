@@ -8,7 +8,7 @@ let tokVal = '';
 let lastStart = 0;
 let lastEnd = 0;
 let strict = false;
-const puncChars = /[\.:,;\{\}\(\)]/;
+const puncChars = /[\.:,;\{\}\(\)\[\]]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
 const keywords = /^(?:var|const|let|function)$/;
@@ -174,7 +174,9 @@ function parseInExpression() {
             expected(_parenR);
             return val;
         case _braceL:
-            return parseBlock();
+            return parseObj();
+        case _bracketL:
+            return parseArray();
         case _func:
             next();
             return parseFunction(node, false);
@@ -239,6 +241,52 @@ function parseParen() {
     const value = parseExpression();
     expected(_parenR);
     return value;
+}
+
+function parseObj() {
+    const node = startNode();
+    expected(_braceL);
+    node.properties = [];
+    let first = true;
+    while (!eat(_braceR)) {
+        if (first) {
+            first = false;
+        } else {
+            expected(_comma);
+            if (eat(_braceR)) {
+                break;
+            }
+        }
+        const n = startNode();
+        n.method = false;
+        n.shorthand = false;
+        n.computed = false;
+        n.key = parseExpression();
+        expected(_colon);
+        n.value = parseExpression(true);
+        node.properties.push(finishNode(n, 'Property'));
+    }
+    return finishNode(node, 'ObjectExpression');
+}
+
+function parseArray() {
+    const node = startNode();
+    node.elements = [];
+    expected(_bracketL);
+    let first = true;
+    while (!eat(_bracketR)) {
+        if (first) {
+            first = false
+        } else {
+            expected(_comma);
+            if (eat(_bracketR)) {
+                break;
+            }
+        }
+        node.elements.push(parseExpression(true))
+    }
+    return finishNode(node, 'ArrayExpression');
+
 }
 
 function parseExprSubscripts() {
