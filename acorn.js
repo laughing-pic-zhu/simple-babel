@@ -8,10 +8,11 @@ let tokVal = '';
 let lastStart = 0;
 let lastEnd = 0;
 let strict = false;
-const puncChars = /[\.,;\{\}\(\)]/;
+const puncChars = /[\.:,;\{\}\(\)]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
 const keywords = /^(?:var|const|let|function)$/;
+const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
@@ -31,6 +32,7 @@ const _bracketR = {type: ']'};
 const _parenL = {type: '('};
 const _parenR = {type: ')'};
 const _var = {type: 'var'};
+const _colon = {type: ':'};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
 const _slash = {binop: 10};
@@ -81,6 +83,7 @@ const puncTypes = {
     ']': _bracketR,
     '(': _parenL,
     ')': _parenR,
+    ':': _colon,
 };
 
 function parse(inpt) {
@@ -108,6 +111,7 @@ function parse(inpt) {
 
 function parseStatement() {
     const node = startNode();
+    const lastTokType = tokType;
     switch (tokType) {
         case _var:
             next();
@@ -120,8 +124,15 @@ function parseStatement() {
         case _slash:
             next();
             return node;
+        case _braceL:
+            return parseBlock();
         default:
             const expr = parseExpression();
+            if (lastTokType === _name && expr.type === 'Identifier' && eat(tokType)) {
+                node.label = expr;
+                node.body = parseStatement();
+                return finishNode(node, 'LabeledStatement');
+            }
             node.expression = expr;
             semicolon();
             return finishNode(node, 'expressionStatement');
@@ -174,6 +185,9 @@ function parseInExpression() {
 
 function parseIdent() {
     const node = startNode();
+    if (tokType !== _name) {
+        unexpected();
+    }
     node.name = tokVal;
     next();
     return finishNode(node, 'Identifier');
@@ -271,7 +285,6 @@ function parseSubscript(base) {
         const node = copyNodeStart(base);
         node.arguments = parseExprList();
         node.callee = base;
-        // expected(_parenR);
         return finishNode(node, 'CallExpression');
     }
     return base
@@ -318,7 +331,6 @@ function parseExprOp(left, low) {
     return left;
 }
 
-
 function parseVar(node) {
     node.declarations = [];
     for (; ;) {
@@ -348,7 +360,7 @@ function checkLVal(node) {
 }
 
 function isUseStrict(stmt) {
-    return stmt.type === 'expressionStatement' && stmt.expression.type === 'Literal' && stmt.value === 'use strict'
+    return stmt.type === 'expressionStatement' && stmt.expression.type === 'Literal' && stmt.expression.value === 'use strict'
 }
 
 function semicolon() {
@@ -398,6 +410,8 @@ function readWord() {
 
     if (keywords.test(word)) {
         tokType = keywordTypes[word];
+    } else if (strict && strictReservedWords.test(word)) {
+        raise(tokStart, `The keyword "${word}" is reserved`);
     }
     finishToken(tokType, word);
 }
