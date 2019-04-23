@@ -8,10 +8,11 @@ let tokVal = '';
 let lastStart = 0;
 let lastEnd = 0;
 let strict = false;
+let inFunction = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|while|break|continue|try|catch)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
@@ -35,6 +36,19 @@ const _var = {type: 'var'};
 const _colon = {type: ':'};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
+const _return = {type: 'return'};
+const _throw = {type: 'throw'};
+const _if = {type: 'if'};
+const _else = {type: 'else'};
+const _switch = {type: 'switch'};
+const _case = {type: 'case'};
+const _for = {type: 'for'};
+const _while = {type: 'while'};
+const _break = {type: 'break'};
+const _continue = {type: 'continue'};
+const _try = {type: 'try'};
+const _catch = {type: 'catch'};
+const _default = {type: 'default'};
 const _slash = {binop: 10};
 const strictBadWords = /^(?:eval|arguments)$/;
 
@@ -43,8 +57,8 @@ const opTypes = {
     '=': _eq,
     '+': {binop: 9, prefix: true,},
     '-': {binop: 9, prefix: true,},
-    '++': {prefix: true, isUpdate: true},
-    '--': {prefix: true, isUpdate: true},
+    '++': {postfix: true, prefix: true, isUpdate: true},
+    '--': {postfix: true, prefix: true, isUpdate: true},
     '!': {prefix: true,},
     '~': {prefix: true,},
     '===': {binop: 6},
@@ -71,7 +85,20 @@ const keywordTypes = {
     'var': _var,
     'const': _var,
     'let': _var,
-    'function': _func
+    'function': _func,
+    'return': _return,
+    'throw': _throw,
+    'if': _if,
+    'else': _else,
+    'switch': _switch,
+    'case': _case,
+    'default': _default,
+    'for': _for,
+    'while': _while,
+    'break': _break,
+    'continue': _continue,
+    'try': _try,
+    'catch': _catch,
 };
 const puncTypes = {
     ';': _semi,
@@ -126,9 +153,23 @@ function parseStatement() {
             return node;
         case _braceL:
             return parseBlock();
+        case _return:
+            return parseReturn();
+        case _throw:
+            return parseThrow();
+            semicolon();
+        case _if:
+            return parseIf();
+        case _switch:
+            return parseSwitch();
+        case _break:
+        case _continue:
+            return parseBreak();
+        case _semi:
+            return parseEmpty();
         default:
             const expr = parseExpression();
-            if (lastTokType === _name && expr.type === 'Identifier' && eat(tokType)) {
+            if (lastTokType === _name && expr.type === 'Identifier' && eat(_colon)) {
                 node.label = expr;
                 node.body = parseStatement();
                 return finishNode(node, 'LabeledStatement');
@@ -208,7 +249,10 @@ function parseFunction(node, isStatement) {
         }
         node.params.push(parseIdent());
     }
+    var oldInFunc = inFunction;
+    inFunction = true;
     node.body = parseBlock(true);
+    inFunction = oldInFunc;
     const type = isStatement ? 'FunctionDeclaration' : 'FunctionExpression';
     return finishNode(node, type);
 }
@@ -236,7 +280,7 @@ function parseBlock(allowStrict) {
     return finishNode(node, 'BlockStatement');
 }
 
-function parseParen() {
+function parseParenExpression() {
     expected(_parenL);
     const value = parseExpression();
     expected(_parenR);
@@ -289,12 +333,96 @@ function parseArray() {
 
 }
 
+function parseBreak() {
+    const type = tokType === _break ? 'BreakStatement' : 'ContinueStatement';
+    const node = startNode();
+    next();
+    node.label = null;
+    semicolon();
+    return finishNode(node, type);
+}
+
+function parseReturn() {
+    if (!inFunction) {
+        raise(tokStart, '"return" outside in function');
+    }
+    const node = startNode();
+    next();
+    if (semicolon()) {
+        node.arguments = null;
+    } else {
+        node.arguments = parseExpression();
+        semicolon();
+    }
+    return finishNode(node, 'ReturnStatement');
+}
+
+function parseThrow() {
+    const node = startNode();
+    next();
+    node.argument = parseExpression();
+    return finishNode(node, 'ThrowStatement');
+}
+
+function parseIf() {
+    const node = startNode();
+    next();
+    node.test = parseParenExpression()
+    node.consequent = parseStatement();
+    if (eat(_else)) {
+        node.alternate = parseStatement();
+    }
+    return finishNode(node, 'IfStatement');
+}
+
+function parseSwitch() {
+    const node = startNode();
+    next();
+    node.discriminant = parseParenExpression();
+    node.cases = [];
+    expected(_braceL);
+    for (let cur, sawDefault, oldToken; !eat(_braceR);) {
+        if (tokType === _case || tokType === _default) {
+            if (cur) {
+                node.cases.push(finishNode(cur, 'SwitchCase'));
+            }
+            oldToken = tokType;
+            cur = startNode();
+            next();
+            if (oldToken === _case) {
+                cur.test = parseExpression();
+            } else {
+                if (sawDefault) {
+                    raise(tokStart, 'multiple default clauses');
+                }
+                sawDefault = cur;
+                cur.test = null;
+            }
+            cur.consequent = [];
+            expected(_colon);
+        } else {
+            if (cur) {
+                cur.consequent.push(parseStatement());
+            } else {
+                unexpected();
+            }
+        }
+    }
+    return finishNode(node, 'SwitchStatement');
+}
+
+function parseEmpty() {
+    const node = startNode();
+    next();
+    return finishNode(node, 'EmptyStatement');
+}
+
 function parseExprSubscripts() {
-    return parseSubscript(parseMaybeUnary());
+    return parseSubscript(parseInExpression());
 }
 
 function parseMaybeAssign() {
-    const left = parseExprOp(parseExprSubscripts(), -1);
+    const left = parseExprOp(parseMaybeUnary(), -1);
     if (tokType === _eq) {
         const node = copyNodeStart(left);
         node.left = left;
@@ -318,7 +446,15 @@ function parseMaybeUnary() {
         const type = update ? 'UpdateExpression' : 'UnaryExpression';
         return finishNode(node, type);
     }
-    const left = parseInExpression();
+    const left = parseExprSubscripts();
+    if (tokType.postfix) {
+        const node = copyNodeStart(left);
+        node.argument = left;
+        node.operator = tokVal;
+        node.prefix = false;
+        next();
+        return finishNode(node, 'UpdateExpression')
+    }
     return left
 }
 
@@ -348,20 +484,6 @@ function parseExprList() {
         extr.push(parseExpression());
     }
     return extr
-}
-
-function parseUnary() {
-    const left = parseInExpression();
-    if (tokType.prefix) {
-        const node = copyNodeStart(left);
-        node.prefix = true;
-        node.operator = tokVal;
-        node.argument = parseExprSubscripts();
-        checkLVal(node.argument);
-        const type = node.isUpdate ? 'UpdateExpression' : 'UnaryExpression';
-        return finishNode(node, type);
-    }
-    return left
 }
 
 function parseExprOp(left, low) {

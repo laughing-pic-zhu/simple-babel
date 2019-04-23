@@ -11,9 +11,18 @@ Statement
 - [x] FunctionDeclaration
 - [x] ExpressionStatement
 - [x] BlockStatement
+- [x] LabeledStatement
+- [x] SwitchStatement
+- [x] BreakStatement
+- [x] ContinueStatement
+- [x] EmptyStatement
+- [x] ThrowStatement
+- [x] ReturnStatement
+- [x] IfStatement
 
 Expression
 
+- [x] thisExpression
 - [x] SequenceExpression
 - [x] AssignmentExpression
 - [x] UpdateExpression
@@ -22,9 +31,13 @@ Expression
 - [x] LogicalExpression
 - [x] BinaryExpression
 - [x] CallExpression
+- [x] FunctionExpression
 - [x] VariableDeclarator
-    
-## How to start
+- [x] ObjectExpression
+- [x] ArrayExpression
+- [x] Property
+- [x] Literal
+- [x] Identifier
 
 ## How to test
  
