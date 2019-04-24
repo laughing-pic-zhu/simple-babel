@@ -19,7 +19,12 @@ Statement
 - [x] ThrowStatement
 - [x] ReturnStatement
 - [x] IfStatement
-
+- [x] ForStatement
+- [x] ForInStatement
+- [x] WhileStatement
+- [x] DoWhileStatement
+- [x] TryStatement
+- [x] DebuggerStatement
 Expression
 
 - [x] thisExpression
@@ -35,6 +40,7 @@ Expression
 - [x] VariableDeclarator
 - [x] ObjectExpression
 - [x] ArrayExpression
+- [x] ConditionalExpression
 - [x] Property
 - [x] Literal
 - [x] Identifier
@@ -44,6 +50,3 @@ Expression
 ```bash
 npm run test
 ```
-    
-
-

@@ -9,17 +9,17 @@ let lastStart = 0;
 let lastEnd = 0;
 let strict = false;
 let inFunction = false;
-const puncChars = /[\.:,;\{\}\(\)\[\]]/;
+const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|while|break|continue|try|catch)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
 const logicReg = /&&|\|\|/;
-const _eof = {type: "eof"};
 
+const _eof = {type: "eof"};
 const _name = {type: 'name'};
 const _num = {type: 'number'};
 const _string = {type: 'string'};
@@ -43,12 +43,17 @@ const _else = {type: 'else'};
 const _switch = {type: 'switch'};
 const _case = {type: 'case'};
 const _for = {type: 'for'};
+const _in = {type: 'in'};
+const _do = {type: 'do'};
 const _while = {type: 'while'};
 const _break = {type: 'break'};
 const _continue = {type: 'continue'};
 const _try = {type: 'try'};
 const _catch = {type: 'catch'};
+const _finally = {type: 'finally'};
 const _default = {type: 'default'};
+const _debugger = {type: 'debugger'};
+const _question = {type: '?'};
 const _slash = {binop: 10};
 const strictBadWords = /^(?:eval|arguments)$/;
 
@@ -94,11 +99,16 @@ const keywordTypes = {
     'case': _case,
     'default': _default,
     'for': _for,
+    'in': _in,
     'while': _while,
+    'do': _do,
     'break': _break,
     'continue': _continue,
     'try': _try,
     'catch': _catch,
+    'finally': _finally,
+    'debugger': _debugger,
+    '?': _question,
 };
 const puncTypes = {
     ';': _semi,
@@ -111,6 +121,7 @@ const puncTypes = {
     '(': _parenL,
     ')': _parenR,
     ':': _colon,
+    '?': _question,
 };
 
 function parse(inpt) {
@@ -141,10 +152,9 @@ function parseStatement() {
     const lastTokType = tokType;
     switch (tokType) {
         case _var:
-            next();
             parseVar(node);
             semicolon();
-            return finishNode(node, "VariableDeclaration");
+            return node;
         case _func:
             next();
             return parseFunction(node, true);
@@ -167,6 +177,38 @@ function parseStatement() {
             return parseBreak();
         case _semi:
             return parseEmpty();
+        case _for:
+            const n = startNode();
+            next();
+            expected(_parenL);
+            if (tokType === _semi) {
+                return parseFor(n, null);
+            } else {
+                if (tokType === _var) {
+                    const temp = startNode();
+                    const v = parseVar(temp);
+                    if (tokType === _in) {
+                        return parseForIn(n, v);
+                    } else {
+                        return parseFor(n, v);
+                    }
+                }
+                const p = parseExpression();
+                if (tokType === _in) {
+                    checkLVal(p);
+                    return parseForIn(n, p);
+                } else {
+                    return parseFor(n, p);
+                }
+            }
+        case _while:
+            return parseWhile();
+        case _do:
+            return parseDoWhile();
+        case _debugger:
+            return parseDebugger();
+        case _try:
+            return parseTry();
         default:
             const expr = parseExpression();
             if (lastTokType === _name && expr.type === 'Identifier' && eat(_colon)) {
@@ -181,7 +223,7 @@ function parseStatement() {
 }
 
 function parseExpression(noComma) {
-    const expr = parseMaybeAssign();
+    const expr = parseMayBeCondition();
     if (!noComma && tokType === _comma) {
         const node = copyNodeStart(expr);
         node.expression = [expr];
@@ -411,10 +453,92 @@ function parseSwitch() {
     return finishNode(node, 'SwitchStatement');
 }
 
+function parseWhile() {
+    const node = startNode();
+    next();
+    node.test = parseParenExpression();
+    node.body = parseBlock();
+    return finishNode(node, 'WhileStatement');
+}
+
+function parseDoWhile() {
+    const node = startNode();
+    next();
+    node.body = parseBlock();
+    expected(_while);
+    node.test = parseParenExpression();
+    return finishNode(node, 'DoWhileStatement');
+}
+
+function parseDebugger() {
+    const node = startNode();
+    next();
+    semicolon();
+    return finishNode(node, 'DebuggerStatement');
+}
+
+function parseTry() {
+    const node = startNode();
+    next();
+    node.block = parseBlock();
+    node.handler = null;
+    node.finalizer = null;
+    if (tokType === _catch) {
+        const catchNode = startNode();
+        next();
+        expected(_parenL);
+        const param = parseIdent();
+        catchNode.param = param;
+        if (strict && strictBadWords.test(param.name)) {
+            raise(tokStart, `The keyword ${param.name} is reserved`)
+        }
+        expected(_parenR);
+        catchNode.body = parseBlock();
+        node.handler = finishNode(catchNode, 'CatchClause')
+    }
+    if (tokType === _finally) {
+        const finalNode = startNode();
+        next();
+        finalNode.body = parseBlock();
+    }
+    if (!node.handler && !node.finalizer) {
+        raise(node.start, 'Missing catch or finally clause');
+    }
+    return finishNode(node, 'TryStatement')
+}
+
 function parseEmpty() {
     const node = startNode();
     next();
     return finishNode(node, 'EmptyStatement');
+}
+
+function parseFor(node, init) {
+    node.init = init;
+    expected(_semi);
+    if (tokType === _semi) {
+        node.test = null
+    } else {
+        node.test = parseExpression();
+    }
+    expected(_semi);
+    if (tokType === _parenR) {
+        node.update = null
+    } else {
+        node.update = parseExpression();
+    }
+    expected(_parenR);
+    node.body = parseBlock();
+    return finishNode(node, 'ForStatement')
+}
+
+function parseForIn(node, left) {
+    node.left = left;
+    next();
+    node.right = parseExpression();
+    expected(_parenR);
+    node.body = parseBlock();
+    return finishNode(node, 'ForInStatement')
 }
 
 function parseExprSubscripts() {
@@ -432,6 +556,20 @@ function parseMaybeAssign() {
         return finishNode(node, 'AssignmentExpression');
     }
     return left;
+}
+
+function parseMayBeCondition() {
+    const expr = parseMaybeAssign();
+    if (tokType === _question) {
+        const node = copyNodeStart(expr);
+        node.test = expr;
+        next();
+        node.consequent = parseExpression();
+        expected(_colon);
+        node.alternate = parseExpression();
+        return finishNode(node, 'ConditionalExpression');
+    }
+    return expr
 }
 
 function parseMaybeUnary() {
@@ -494,14 +632,14 @@ function parseExprOp(left, low) {
         node.operator = tokVal;
         const type = logicReg.test(tokVal) ? 'LogicalExpression' : 'BinaryExpression';
         next();
-        node.right = parseExprSubscripts();
-        semicolon();
+        node.right = parseExpression();
         return finishNode(node, type);
     }
     return left;
 }
 
 function parseVar(node) {
+    next();
     node.declarations = [];
     for (; ;) {
         const n = startNode();
@@ -510,7 +648,7 @@ function parseVar(node) {
         node.declarations.push(finishNode(n, 'VariableDeclarator'));
         if (!eat(_comma)) break;
     }
-    return node;
+    return finishNode(node, "VariableDeclaration");
 }
 
 function copyNodeStart(node) {
@@ -577,7 +715,6 @@ function readWord() {
     identifierG.lastIndex = tokenPos;
     const word = identifierG.exec(input)[0];
     tokenPos = tokenPos + word.length;
-
     if (keywords.test(word)) {
         tokType = keywordTypes[word];
     } else if (strict && strictReservedWords.test(word)) {
@@ -644,7 +781,9 @@ function readToken() {
     lastEnd = tokEnd;
     tokStart = tokenPos;
     const ch = input.charAt(tokenPos);
-    if (tokenPos >= inputLen) return finishToken(_eof);
+    if (tokenPos >= inputLen) {
+        return finishToken(_eof);
+    }
     if (ch === '\'' || ch === '"') {
         readString(ch);
     } else if (indentifierReg.test(ch)) {
