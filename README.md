@@ -5,7 +5,7 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 
 目前支持严格模式'use strict',支持大部分词法。
 
-Statement
+### Statement
 
 - [x] VariableDeclaration
 - [x] FunctionDeclaration
@@ -25,7 +25,9 @@ Statement
 - [x] DoWhileStatement
 - [x] TryStatement
 - [x] DebuggerStatement
-Expression
+
+
+### Expression
 
 - [x] thisExpression
 - [x] SequenceExpression
@@ -41,6 +43,7 @@ Expression
 - [x] ObjectExpression
 - [x] ArrayExpression
 - [x] ConditionalExpression
+- [x] NewExpression
 - [x] Property
 - [x] Literal
 - [x] Identifier

@@ -12,7 +12,7 @@ let inFunction = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
@@ -54,6 +54,7 @@ const _finally = {type: 'finally'};
 const _default = {type: 'default'};
 const _debugger = {type: 'debugger'};
 const _question = {type: '?'};
+const _new = {type: 'new'};
 const _slash = {binop: 10};
 const strictBadWords = /^(?:eval|arguments)$/;
 
@@ -109,6 +110,7 @@ const keywordTypes = {
     'finally': _finally,
     'debugger': _debugger,
     '?': _question,
+    'new': _new,
 };
 const puncTypes = {
     ';': _semi,
@@ -263,6 +265,8 @@ function parseInExpression() {
         case _func:
             next();
             return parseFunction(node, false);
+        case _new:
+            return parseNew()
         default:
             unexpected();
     }
@@ -539,6 +543,14 @@ function parseForIn(node, left) {
     expected(_parenR);
     node.body = parseBlock();
     return finishNode(node, 'ForInStatement')
+}
+
+function parseNew() {
+    const node = startNode();
+    next();
+    node.callee = parseExpression();
+    node.arguments = tokType === _parenL ? parseParenExpression() : [];
+    return finishNode(node, 'NewExpression');
 }
 
 function parseExprSubscripts() {
