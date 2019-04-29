@@ -18,6 +18,7 @@ const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
 const logicReg = /&&|\|\|/;
+const reFlags = /^[gimuy]*$/;
 
 const _eof = {type: "eof"};
 const _name = {type: 'name'};
@@ -56,6 +57,7 @@ const _debugger = {type: 'debugger'};
 const _question = {type: '?'};
 const _new = {type: 'new'};
 const _slash = {binop: 10};
+const _regexp = {type: 'regexp'};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -71,18 +73,18 @@ const opTypes = {
     '==': {binop: 6},
     '!==': {binop: 6},
     '!=': {binop: 6},
-    '>': {binop: 6},
-    '>=': {binop: 6},
-    '>>': {binop: 6},
-    '>>>': {binop: 6},
-    '<': {binop: 6},
-    '<=': {binop: 6},
-    '<<': {binop: 6},
-    '<<<': {binop: 6},
-    '||': {binop: 2},
-    '&&': {binop: 3},
-    '|': {binop: 4},
-    '&': {binop: 6},
+    '>': {binop: 7},
+    '>=': {binop: 7},
+    '>>': {binop: 8},
+    '>>>': {binop: 8},
+    '<': {binop: 7},
+    '<=': {binop: 7},
+    '<<': {binop: 8},
+    '<<<': {binop: 8},
+    '||': {binop: 1},
+    '&&': {binop: 2},
+    '|': {binop: 3},
+    '&': {binop: 5},
     '*': {binop: 10},
     '%': {binop: 10},
 };
@@ -237,12 +239,14 @@ function parseExpression(noComma) {
     return expr
 }
 
-function parseInExpression() {
+function parseBasicExpression() {
     const node = startNode();
     switch (tokType) {
         case _string:
         case _num:
+        case _regexp:
             node.value = tokVal;
+            node.raw = tokVal;
             next();
             return finishNode(node, 'Literal');
         case _name:
@@ -554,7 +558,7 @@ function parseNew() {
 }
 
 function parseExprSubscripts() {
-    return parseSubscript(parseInExpression());
+    return parseSubscript(parseBasicExpression());
 }
 
 function parseMaybeAssign() {
@@ -722,17 +726,25 @@ function finishNode(node, type) {
     return node
 }
 
+function readWord1(startSpecial) {
+    identifierG.lastIndex = tokenPos;
+    const array = identifierG.exec(input);
+    const word = array && array[0] || '';
+    if (word) {
+        tokenPos = tokenPos + word.length;
+        if (keywords.test(word)) {
+            tokType = keywordTypes[word];
+        } else if (strict && strictReservedWords.test(word)) {
+            raise(tokStart, `The keyword "${word}" is reserved`);
+        }
+        return word;
+    }
+    return word;
+}
+
 function readWord() {
     tokType = _name;
-    identifierG.lastIndex = tokenPos;
-    const word = identifierG.exec(input)[0];
-    tokenPos = tokenPos + word.length;
-    if (keywords.test(word)) {
-        tokType = keywordTypes[word];
-    } else if (strict && strictReservedWords.test(word)) {
-        raise(tokStart, `The keyword "${word}" is reserved`);
-    }
-    finishToken(tokType, word);
+    finishToken(tokType, readWord1());
 }
 
 function readString(quote) {
@@ -788,6 +800,38 @@ function readOperator(op) {
     return finishToken(opTypes[op], op);
 }
 
+function readRegex() {
+    tokenPos++;
+    let content = '', escaped = false, inClass = false, start = tokenPos;
+    for (; ;) {
+        if (tokenPos > inputLen) {
+            raise(start, 'Unterminated regular expression')
+        }
+        const ch = input.charAt(tokenPos);
+        if (newline.test(ch)) {
+            raise(tokenPos, 'Invalid regular expression:missing /')
+        }
+        if (!escaped) {
+            if (ch === '/' && !inClass) {
+                break
+            }
+            if (ch === '[') {
+                inClass = true;
+            } else if (ch === ']' && inClass) {
+                inClass = false;
+            }
+            escaped = ch === '\\';
+        } else {
+            escaped = false;
+        }
+        tokenPos++;
+    }
+    content = input.slice(start, tokenPos);
+    tokenPos++;
+    const word = readWord1();
+    return finishToken(_regexp, new RegExp(content, word))
+}
+
 function readToken() {
     lastStart = tokStart;
     lastEnd = tokEnd;
@@ -796,7 +840,9 @@ function readToken() {
     if (tokenPos >= inputLen) {
         return finishToken(_eof);
     }
-    if (ch === '\'' || ch === '"') {
+    if (ch === '/') {
+        readRegex();
+    } else if (ch === '\'' || ch === '"') {
         readString(ch);
     } else if (indentifierReg.test(ch)) {
         readWord();
@@ -834,9 +880,9 @@ function skipSpace() {
                 }
                 tokenPos = i + 2;
             } else {
-                ++tokenPos;
+                break;
             }
-        } else if (ch === '\n' || ch === '\t' || ch === " ") {
+        } else if (ch === '\n' || ch === '\t' || ch === " " || ch === "\r" || ch === "\f") {
             ++tokenPos;
         } else {
             break;

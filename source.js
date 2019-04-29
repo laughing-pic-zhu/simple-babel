@@ -1,1 +1,1 @@
-a=new A.b
+var a = 1;
