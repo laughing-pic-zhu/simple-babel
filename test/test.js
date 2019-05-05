@@ -1,4 +1,4 @@
-const acorn = require('./acorn');
+const acorn = require('../acorn');
 
 test('test jest', () => {
     expect(acorn.parse('var a=1;')).toEqual(
