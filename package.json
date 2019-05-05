@@ -1,0 +1,23 @@
+{
+  "name": "simple-babel",
+  "version": "1.0.0",
+  "description": "simple babel。旨在深入理解babel的词法/语法分析，代码转换生成等核心功能。",
+  "main": "acorn.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.7.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laughing-pic-zhu/simple-babel.git"
+  },
+  "author": "laughing-pic-zhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laughing-pic-zhu/simple-babel/issues"
+  },
+  "homepage": "https://github.com/laughing-pic-zhu/simple-babel#readme"
+}
