@@ -12,7 +12,7 @@ let inFunction = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
@@ -58,6 +58,7 @@ const _question = {type: '?'};
 const _new = {type: 'new'};
 const _slash = {binop: 10};
 const _regexp = {type: 'regexp'};
+const _this = {type: 'this'};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -113,6 +114,7 @@ const keywordTypes = {
     'debugger': _debugger,
     '?': _question,
     'new': _new,
+    'this': _this,
 };
 const puncTypes = {
     ';': _semi,
@@ -129,6 +131,7 @@ const puncTypes = {
 };
 
 function parse(inpt) {
+    initTokenState();
     input = String(inpt);
     inputLen = input.length;
     const node = startNode();
@@ -148,6 +151,8 @@ function parse(inpt) {
         }
         node.body.push(statement);
     }
+    lastStart = tokStart;
+    lastEnd = tokEnd;
     return finishNode(node, 'Program');
 }
 
@@ -156,9 +161,7 @@ function parseStatement() {
     const lastTokType = tokType;
     switch (tokType) {
         case _var:
-            parseVar(node);
-            semicolon();
-            return node;
+            return parseVarStatement(node);
         case _func:
             next();
             return parseFunction(node, true);
@@ -191,6 +194,7 @@ function parseStatement() {
                 if (tokType === _var) {
                     const temp = startNode();
                     const v = parseVar(temp);
+                    finishNode(v, 'VariableDeclaration');
                     if (tokType === _in) {
                         return parseForIn(n, v);
                     } else {
@@ -250,10 +254,6 @@ function parseBasicExpression() {
             next();
             return finishNode(node, 'Literal');
         case _name:
-            if (tokVal === 'this') {
-                next();
-                return finishNode(node, 'thisExpression');
-            }
             node.value = tokVal;
             next();
             return finishNode(node, 'Identifier');
@@ -270,7 +270,10 @@ function parseBasicExpression() {
             next();
             return parseFunction(node, false);
         case _new:
-            return parseNew()
+            return parseNew();
+        case _this:
+            next();
+            return finishNode(node, 'thisExpression');
         default:
             unexpected();
     }
@@ -305,6 +308,12 @@ function parseFunction(node, isStatement) {
     inFunction = oldInFunc;
     const type = isStatement ? 'FunctionDeclaration' : 'FunctionExpression';
     return finishNode(node, type);
+}
+
+function parseVarStatement(node) {
+    const n = parseVar(node);
+    semicolon();
+    return finishNode(n, 'VariableDeclaration');
 }
 
 function parseBlock(allowStrict) {
@@ -664,7 +673,7 @@ function parseVar(node) {
         node.declarations.push(finishNode(n, 'VariableDeclarator'));
         if (!eat(_comma)) break;
     }
-    return finishNode(node, "VariableDeclaration");
+    return node;
 }
 
 function copyNodeStart(node) {
@@ -744,7 +753,8 @@ function readWord1(startSpecial) {
 
 function readWord() {
     tokType = _name;
-    finishToken(tokType, readWord1());
+    const word = readWord1();
+    finishToken(tokType, word);
 }
 
 function readString(quote) {
@@ -888,6 +898,18 @@ function skipSpace() {
             break;
         }
     }
+}
+
+function initTokenState() {
+    tokenPos = 0;
+    lastStart = 0;
+    lastEnd = 0;
+    tokVal = '';
+    tokType = '';
+    tokStart = 0;
+    tokEnd = 0;
+    strict = false;
+    inFunction = false;
 }
 
 function expected(type) {
