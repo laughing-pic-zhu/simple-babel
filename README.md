@@ -51,5 +51,9 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 ## How to test
  
 ```bash
+npm install
+```
+ 
+```bash
 npm run test
 ```
