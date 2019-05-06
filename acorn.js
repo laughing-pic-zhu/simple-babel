@@ -12,7 +12,7 @@ let inFunction = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
 const digest = /\d/;
@@ -59,6 +59,9 @@ const _new = {type: 'new'};
 const _slash = {binop: 10};
 const _regexp = {type: 'regexp'};
 const _this = {type: 'this'};
+const _null = {type: 'null', atomValue: null};
+const _true = {type: 'true', atomValue: true};
+const _false = {type: 'false', atomValue: false};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -115,6 +118,9 @@ const keywordTypes = {
     '?': _question,
     'new': _new,
     'this': _this,
+    'null': _null,
+    'true': _true,
+    'false': _false,
 };
 const puncTypes = {
     ';': _semi,
@@ -250,6 +256,13 @@ function parseBasicExpression() {
         case _num:
         case _regexp:
             node.value = tokVal;
+            node.raw = input.slice(tokStart, tokEnd);
+            next();
+            return finishNode(node, 'Literal');
+        case _null:
+        case _true:
+        case _false:
+            node.value = tokType.atomValue;
             node.raw = tokVal;
             next();
             return finishNode(node, 'Literal');
@@ -279,12 +292,17 @@ function parseBasicExpression() {
     }
 }
 
-function parseIdent() {
+function parseIdent(flag) {
     const node = startNode();
     if (tokType !== _name) {
-        unexpected();
+        if (flag) {
+            node.name = tokType.type;
+        } else {
+            unexpected();
+        }
+    } else {
+        node.name = tokVal;
     }
-    node.name = tokVal;
     next();
     return finishNode(node, 'Identifier');
 }
@@ -364,12 +382,20 @@ function parseObj() {
         n.method = false;
         n.shorthand = false;
         n.computed = false;
-        n.key = parseExpression();
+        n.kind = 'init';
+        n.key = parsePropertyName();
         expected(_colon);
         n.value = parseExpression(true);
         node.properties.push(finishNode(n, 'Property'));
     }
     return finishNode(node, 'ObjectExpression');
+}
+
+function parsePropertyName() {
+    if (tokType === _num || tokType === _name) {
+        return parseBasicExpression();
+    }
+    return parseIdent(true);
 }
 
 function parseArray() {
@@ -386,7 +412,12 @@ function parseArray() {
                 break;
             }
         }
-        node.elements.push(parseExpression(true))
+        if (tokType === _comma) {
+            node.elements.push(null)
+        } else {
+            node.elements.push(parseExpression(true))
+        }
+
     }
     return finishNode(node, 'ArrayExpression');
 
