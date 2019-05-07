@@ -232,7 +232,7 @@ function parseStatement() {
             }
             node.expression = expr;
             semicolon();
-            return finishNode(node, 'expressionStatement');
+            return finishNode(node, 'ExpressionStatement');
     }
 }
 
@@ -471,7 +471,8 @@ function parseSwitch() {
     node.discriminant = parseParenExpression();
     node.cases = [];
     expected(_braceL);
-    for (let cur, sawDefault, oldToken; !eat(_braceR);) {
+    for (let cur, sawDefault, oldToken; ;) {
+        // !eat(_braceR)
         if (tokType === _case || tokType === _default) {
             if (cur) {
                 node.cases.push(finishNode(cur, 'SwitchCase'));
@@ -490,6 +491,10 @@ function parseSwitch() {
             }
             cur.consequent = [];
             expected(_colon);
+        } else if (tokType === _braceR) {
+            node.cases.push(finishNode(cur, 'SwitchCase'));
+            next();
+            break;
         } else {
             if (cur) {
                 cur.consequent.push(parseStatement());
@@ -635,7 +640,7 @@ function parseMaybeUnary() {
         node.prefix = true;
         node.operator = tokVal;
         next();
-        node.argument = parseExprSubscripts();
+        node.argument = parseExpression();
         if (update) checkLVal(node.argument);
         const type = update ? 'UpdateExpression' : 'UnaryExpression';
         return finishNode(node, type);
@@ -724,7 +729,7 @@ function checkLVal(node) {
 }
 
 function isUseStrict(stmt) {
-    return stmt.type === 'expressionStatement' && stmt.expression.type === 'Literal' && stmt.expression.value === 'use strict'
+    return stmt.type === 'ExpressionStatement' && stmt.expression.type === 'Literal' && stmt.expression.value === 'use strict'
 }
 
 function semicolon() {
