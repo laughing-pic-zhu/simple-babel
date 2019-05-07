@@ -7,7 +7,7 @@ test('test atom type', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'Literal', start: 0, value: 123, raw: '123', end: 3},
                     end: 3
@@ -22,7 +22,7 @@ test('test atom type', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'Literal', start: 0, value: 123, raw: '123', end: 3},
                     end: 3
@@ -37,7 +37,7 @@ test('test atom type', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'Literal', start: 0, value: null, raw: 'null', end: 4},
                     end: 4
@@ -52,7 +52,7 @@ test('test atom type', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'Literal', start: 0, value: true, raw: 'true', end: 4},
                     end: 5
@@ -67,7 +67,7 @@ test('test atom type', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'Literal', start: 0, value: false, raw: 'false', end: 5},
                     end: 5

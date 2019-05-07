@@ -29,7 +29,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression: {type: 'thisExpression', start: 0, end: 4},
                     end: 4
@@ -44,7 +44,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -67,7 +67,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -96,7 +96,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -128,7 +128,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -161,7 +161,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -184,7 +184,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -207,7 +207,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -247,7 +247,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
@@ -287,7 +287,7 @@ test('test expression', () => {
             start: 0,
             body:
                 [{
-                    type: 'expressionStatement',
+                    type: 'ExpressionStatement',
                     start: 0,
                     expression:
                         {
