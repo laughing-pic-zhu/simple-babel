@@ -12,9 +12,9 @@ let inFunction = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false)$/;
+const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
-const operatorChar = /[+\-\*%\/=>\|&\!\~]/;
+const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
 const logicReg = /&&|\|\|/;
@@ -62,6 +62,10 @@ const _this = {type: 'this'};
 const _null = {type: 'null', atomValue: null};
 const _true = {type: 'true', atomValue: true};
 const _false = {type: 'false', atomValue: false};
+const _void = {type: 'void', prefix: true};
+const _typeof = {type: 'typeof', prefix: true};
+const _delete = {type: 'delete', prefix: true};
+const _instanceof = {type: 'instanceof', binop: 7,};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -121,6 +125,10 @@ const keywordTypes = {
     'null': _null,
     'true': _true,
     'false': _false,
+    'void': _void,
+    'typeof': _typeof,
+    'delete': _delete,
+    'instanceof': _instanceof,
 };
 const puncTypes = {
     ';': _semi,
@@ -451,6 +459,7 @@ function parseThrow() {
     const node = startNode();
     next();
     node.argument = parseExpression();
+    node.computed = false;
     return finishNode(node, 'ThrowStatement');
 }
 
@@ -549,10 +558,10 @@ function parseTry() {
         catchNode.body = parseBlock();
         node.handler = finishNode(catchNode, 'CatchClause')
     }
-    if (tokType === _finally) {
+    if (eat(_finally)) {
         const finalNode = startNode();
-        next();
         finalNode.body = parseBlock();
+        node.finalizer = finishNode(finalNode,'BlockStatement');
     }
     if (!node.handler && !node.finalizer) {
         raise(node.start, 'Missing catch or finally clause');
