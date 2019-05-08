@@ -331,4 +331,127 @@ test('test expression', () => {
             end: 18
         }
     );
+
+    expect(acorn.parse('delete a.b')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            type: 'UnaryExpression',
+                            start: 0,
+                            prefix: true,
+                            operator: 'delete',
+                            argument:
+                                {
+                                    start: 7,
+                                    type: 'MemberExpression',
+                                    object: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                                    property: {type: 'Identifier', start: 9, name: 'b', end: 10},
+                                    computed: false,
+                                    end: 10
+                                },
+                            end: 10
+                        },
+                    end: 10
+                }],
+            end: 10
+        }
+    );
+
+    expect(acorn.parse('typeof a.b()')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            type: 'UnaryExpression',
+                            start: 0,
+                            prefix: true,
+                            operator: 'typeof',
+                            argument:
+                                {
+                                    start: 7,
+                                    type: 'CallExpression',
+                                    arguments: [],
+                                    callee:
+                                        {
+                                            start: 7,
+                                            type: 'MemberExpression',
+                                            object: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                                            property: {type: 'Identifier', start: 9, name: 'b', end: 10},
+                                            computed: false,
+                                            end: 10
+                                        },
+                                    end: 12
+                                },
+                            end: 12
+                        },
+                    end: 12
+                }],
+            end: 12
+        }
+    );
+
+    expect(acorn.parse('void a')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            type: 'UnaryExpression',
+                            start: 0,
+                            prefix: true,
+                            operator: 'void',
+                            argument: {type: 'Identifier', start: 5, value: 'a', end: 6},
+                            end: 6
+                        },
+                    end: 6
+                }],
+            end: 6
+        }
+    );
+
+    expect(acorn.parse('a instanceof b.c')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            operator: 'instanceof',
+                            right:
+                                {
+                                    start: 13,
+                                    type: 'MemberExpression',
+                                    object: {type: 'Identifier', start: 13, value: 'b', end: 14},
+                                    property: {type: 'Identifier', start: 15, name: 'c', end: 16},
+                                    computed: false,
+                                    end: 16
+                                },
+                            end: 16
+                        },
+                    end: 16
+                }],
+            end: 16
+        }
+    );
 });

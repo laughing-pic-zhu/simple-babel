@@ -216,6 +216,30 @@ test('test atom type', () => {
             end: 6
         }
     )
+
+    expect(acorn.parse('a < b')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            operator: '<',
+                            right: {type: 'Identifier', start: 4, value: 'b', end: 5},
+                            end: 5
+                        },
+                    end: 5
+                }],
+            end: 5
+        }
+    )
+
 });
 
 
