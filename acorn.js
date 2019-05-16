@@ -9,6 +9,7 @@ let lastStart = 0;
 let lastEnd = 0;
 let strict = false;
 let inFunction = false;
+let allowRegexp = true;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
@@ -24,23 +25,23 @@ const _eof = {type: "eof"};
 const _name = {type: 'name'};
 const _num = {type: 'number'};
 const _string = {type: 'string'};
-const _semi = {type: ';'};
-const _comma = {type: ','};
+const _semi = {type: ';', beforeExpr: true};
+const _comma = {type: ',', beforeExpr: true};
 const _dot = {type: '.'};
-const _braceL = {type: '{'};
+const _braceL = {type: '{', beforeExpr: true};
 const _braceR = {type: '}'};
-const _bracketL = {type: '['};
+const _bracketL = {type: '[', beforeExpr: true};
 const _bracketR = {type: ']'};
-const _parenL = {type: '('};
+const _parenL = {type: '(', beforeExpr: true};
 const _parenR = {type: ')'};
 const _var = {type: 'var'};
-const _colon = {type: ':'};
+const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
 const _return = {type: 'return'};
 const _throw = {type: 'throw'};
 const _if = {type: 'if'};
-const _else = {type: 'else'};
+const _else = {type: 'else', beforeExpr: true};
 const _switch = {type: 'switch'};
 const _case = {type: 'case'};
 const _for = {type: 'for'};
@@ -54,18 +55,19 @@ const _catch = {type: 'catch'};
 const _finally = {type: 'finally'};
 const _default = {type: 'default'};
 const _debugger = {type: 'debugger'};
-const _question = {type: '?'};
+const _question = {type: '?', beforeExpr: true};
 const _new = {type: 'new'};
-const _slash = {binop: 10};
+const _slash = {binop: 10, beforeExpr: true};
 const _regexp = {type: 'regexp'};
 const _this = {type: 'this'};
 const _null = {type: 'null', atomValue: null};
 const _true = {type: 'true', atomValue: true};
 const _false = {type: 'false', atomValue: false};
-const _void = {type: 'void', prefix: true};
-const _typeof = {type: 'typeof', prefix: true};
-const _delete = {type: 'delete', prefix: true};
-const _instanceof = {type: 'instanceof', binop: 7,};
+const _void = {type: 'void', prefix: true, beforeExpr: true};
+const _typeof = {type: 'typeof', prefix: true, beforeExpr: true};
+const _delete = {type: 'delete', prefix: true, beforeExpr: true};
+const _instanceof = {type: 'instanceof', binop: 7, beforeExpr: true};
+const _arrow = {type: '=>',};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -95,6 +97,7 @@ const opTypes = {
     '&': {binop: 5},
     '*': {binop: 10},
     '%': {binop: 10},
+    '=>': {binop: 10},
 };
 
 const keywordTypes = {
@@ -561,7 +564,7 @@ function parseTry() {
     if (eat(_finally)) {
         const finalNode = startNode();
         finalNode.body = parseBlock();
-        node.finalizer = finishNode(finalNode,'BlockStatement');
+        node.finalizer = finishNode(finalNode, 'BlockStatement');
     }
     if (!node.handler && !node.finalizer) {
         raise(node.start, 'Missing catch or finally clause');
@@ -895,7 +898,7 @@ function readToken() {
     if (tokenPos >= inputLen) {
         return finishToken(_eof);
     }
-    if (ch === '/') {
+    if (allowRegexp && ch === '/') {
         readRegex();
     } else if (ch === '\'' || ch === '"') {
         readString(ch);
@@ -915,6 +918,7 @@ function finishToken(type, str) {
     tokEnd = tokenPos;
     tokType = type;
     tokVal = str;
+    allowRegexp = type.beforeExpr;
     skipSpace();
 }
 
@@ -955,6 +959,7 @@ function initTokenState() {
     tokEnd = 0;
     strict = false;
     inFunction = false;
+    allowRegexp = true;
 }
 
 function expected(type) {
