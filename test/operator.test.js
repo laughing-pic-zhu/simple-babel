@@ -240,6 +240,108 @@ test('test atom type', () => {
         }
     )
 
+    expect(acorn.parse('a+b*c-d')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left:
+                                {
+                                    start: 0,
+                                    type: 'BinaryExpression',
+                                    left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                    operator: '+',
+                                    right:
+                                        {
+                                            start: 2,
+                                            type: 'BinaryExpression',
+                                            left: {type: 'Identifier', start: 2, value: 'b', end: 3},
+                                            operator: '*',
+                                            right: {type: 'Identifier', start: 4, value: 'c', end: 5},
+                                            end: 5
+                                        },
+                                    end: 5
+                                },
+                            operator: '-',
+                            right: {type: 'Identifier', start: 6, value: 'd', end: 7},
+                            end: 7
+                        },
+                    end: 7
+                }],
+            end: 7
+        }
+    )
+
+    expect(acorn.parse('b*c+a')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left:
+                                {
+                                    start: 0,
+                                    type: 'BinaryExpression',
+                                    left: {type: 'Identifier', start: 0, value: 'b', end: 1},
+                                    operator: '*',
+                                    right: {type: 'Identifier', start: 2, value: 'c', end: 3},
+                                    end: 3
+                                },
+                            operator: '+',
+                            right: {type: 'Identifier', start: 4, value: 'a', end: 5},
+                            end: 5
+                        },
+                    end: 5
+                }],
+            end: 5
+        }
+    )
+
+    expect(acorn.parse('a+b*c')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [
+                    {
+                        type: 'ExpressionStatement',
+                        start: 0,
+                        expression:
+                            {
+                                start: 0,
+                                type: 'BinaryExpression',
+                                left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                operator: '+',
+                                right:
+                                    {
+                                        start: 2,
+                                        type: 'BinaryExpression',
+                                        left: {type: 'Identifier', start: 2, value: 'b', end: 3},
+                                        operator: '*',
+                                        right: {type: 'Identifier', start: 4, value: 'c', end: 5},
+                                        end: 5
+                                    },
+                                end: 5
+                            },
+                        end: 5
+                    }],
+            end: 5
+        }
+    )
+
 });
 
 

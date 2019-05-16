@@ -705,8 +705,9 @@ function parseExprOp(left, low) {
         node.operator = tokVal;
         const type = logicReg.test(tokVal) ? 'LogicalExpression' : 'BinaryExpression';
         next();
-        node.right = parseExpression();
-        return finishNode(node, type);
+        node.right = parseExprOp(parseExprSubscripts(), proc);
+        const exprNode = finishNode(node, type);
+        return parseExprOp(exprNode, low)
     }
     return left;
 }
