@@ -67,7 +67,7 @@ const _void = {type: 'void', prefix: true, beforeExpr: true};
 const _typeof = {type: 'typeof', prefix: true, beforeExpr: true};
 const _delete = {type: 'delete', prefix: true, beforeExpr: true};
 const _instanceof = {type: 'instanceof', binop: 7, beforeExpr: true};
-const _arrow = {type: '=>',};
+const _arrow = {type: '=>', beforeExpr: true};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -97,7 +97,6 @@ const opTypes = {
     '&': {binop: 5},
     '*': {binop: 10},
     '%': {binop: 10},
-    '=>': {binop: 10},
 };
 
 const keywordTypes = {
@@ -280,11 +279,27 @@ function parseBasicExpression() {
         case _name:
             node.value = tokVal;
             next();
-            return finishNode(node, 'Identifier');
+            finishNode(node, 'Identifier')
+            if (tokType === _arrow) {
+                return parseArrowFunction(node, [node]);
+            }
+            return node;
         case _parenL:
             next();
-            const val = parseExpression();
+            let val;
+            let exprList;
+            if (tokType !== _parenR) {
+                val = parseExpression();
+                exprList = val.type === 'SequenceExpression' ? val.expression : [val];
+            } else {
+                exprList = [];
+            }
             expected(_parenR);
+            if (tokType === _arrow) {
+                return parseArrowFunction(node, exprList);
+            } else if (!val) {
+                unexpected();
+            }
             return val;
         case _braceL:
             return parseObj();
@@ -614,6 +629,22 @@ function parseNew() {
     return finishNode(node, 'NewExpression');
 }
 
+function parseArrowFunction(n, list) {
+    const node = copyNodeStart(n);
+    node.id = null;
+    node.generator = false;
+    node.params = list;
+    next();
+    if (tokType === _braceL) {
+        node.expression = false;
+        node.body = parseBlock();
+    } else {
+        node.expression = true;
+        node.body = parseExpression();
+    }
+    return finishNode(node, 'ArrowFunctionExpression')
+}
+
 function parseExprSubscripts() {
     return parseSubscript(parseBasicExpression());
 }
@@ -856,7 +887,12 @@ function readOperator(op) {
             op = op + ch;
         }
     }
-    return finishToken(opTypes[op], op);
+    let type = opTypes[op];
+    if (op === '=' && input.charAt(tokenPos) === '>') {
+        tokenPos++;
+        type = _arrow;
+    }
+    return finishToken(type, op);
 }
 
 function readRegex() {
