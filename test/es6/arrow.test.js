@@ -1,6 +1,6 @@
-const acorn = require('../acorn');
+const acorn = require('../../acorn');
 
-test('test atom type', () => {
+test('test arrow function', () => {
         expect(acorn.parse('(a,b,c)=>b')).toEqual(
             {
                 type: 'Program',
