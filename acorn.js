@@ -211,7 +211,7 @@ function parseStatement() {
             if (tokType === _semi) {
                 return parseFor(n, null);
             } else {
-                if (tokType === _var) {
+                if (tokType === _var || tokType === _let || tokType === _const) {
                     const temp = startNode();
                     const v = parseVar(temp);
                     finishNode(v, 'VariableDeclaration');
