@@ -9,6 +9,7 @@ test('test expression', () => {
                 [{
                     type: 'VariableDeclaration',
                     start: 0,
+                    kind: 'var',
                     declarations:
                         [{
                             type: 'VariableDeclarator',

@@ -35,6 +35,8 @@ const _bracketR = {type: ']'};
 const _parenL = {type: '(', beforeExpr: true};
 const _parenR = {type: ')'};
 const _var = {type: 'var'};
+const _let = {type: 'let'};
+const _const = {type: 'const'};
 const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
@@ -101,8 +103,8 @@ const opTypes = {
 
 const keywordTypes = {
     'var': _var,
-    'const': _var,
-    'let': _var,
+    'const': _const,
+    'let': _let,
     'function': _func,
     'return': _return,
     'throw': _throw,
@@ -177,6 +179,8 @@ function parseStatement() {
     const lastTokType = tokType;
     switch (tokType) {
         case _var:
+        case _let:
+        case _const:
             return parseVarStatement(node);
         case _func:
             next();
@@ -744,12 +748,14 @@ function parseExprOp(left, low) {
 }
 
 function parseVar(node) {
+    node.kind = tokVal;
+    const oldToken = tokType;
     next();
     node.declarations = [];
     for (; ;) {
         const n = startNode();
         n.id = parseIdent();
-        n.init = eat(_eq) ? parseExpression(true) : null;
+        n.init = eat(_eq) ? parseExpression(true) : oldToken === _const ? unexpected() : null;
         node.declarations.push(finishNode(n, 'VariableDeclarator'));
         if (!eat(_comma)) break;
     }

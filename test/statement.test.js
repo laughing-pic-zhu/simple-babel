@@ -9,50 +9,16 @@ test('test statement', () => {
                 [{
                     type: 'VariableDeclaration',
                     start: 0,
+                    kind: 'var',
                     declarations:
-                        [{
-                            type: 'VariableDeclarator',
-                            start: 4,
-                            id: {type: 'Identifier', start: 4, name: 'a', end: 5},
-                            init: null,
-                            end: 5
-                        },
+                        [
                             {
                                 type: 'VariableDeclarator',
-                                start: 6,
-                                id: {type: 'Identifier', start: 6, name: 'b', end: 7},
+                                start: 4,
+                                id: {type: 'Identifier', start: 4, name: 'a', end: 5},
                                 init: null,
-                                end: 7
+                                end: 5
                             },
-                            {
-                                type: 'VariableDeclarator',
-                                start: 8,
-                                id: {type: 'Identifier', start: 8, name: 'c', end: 9},
-                                init: null,
-                                end: 9
-                            }],
-                    end: 9
-                }],
-            end: 9
-        }
-    )
-
-    expect(acorn.parse('var a,b,c')).toEqual(
-        {
-            type: 'Program',
-            start: 0,
-            body:
-                [{
-                    type: 'VariableDeclaration',
-                    start: 0,
-                    declarations:
-                        [{
-                            type: 'VariableDeclarator',
-                            start: 4,
-                            id: {type: 'Identifier', start: 4, name: 'a', end: 5},
-                            init: null,
-                            end: 5
-                        },
                             {
                                 type: 'VariableDeclarator',
                                 start: 6,
@@ -428,6 +394,7 @@ test('test statement', () => {
                         {
                             type: 'VariableDeclaration',
                             start: 4,
+                            kind: 'var',
                             declarations:
                                 [{
                                     type: 'VariableDeclarator',
@@ -498,6 +465,7 @@ test('test statement', () => {
                         {
                             type: 'VariableDeclaration',
                             start: 4,
+                            kind: 'var',
                             declarations:
                                 [{
                                     type: 'VariableDeclarator',
