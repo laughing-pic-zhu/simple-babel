@@ -13,11 +13,12 @@ let allowRegexp = true;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
+const keywords = /^(?:var|const|let|class|constructor|extends|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
+const lineBreak = /[\n\r\u2028\u2029]/g;
 const logicReg = /&&|\|\|/;
 const reFlags = /^[gimuy]*$/;
 
@@ -37,6 +38,7 @@ const _parenR = {type: ')'};
 const _var = {type: 'var'};
 const _let = {type: 'let'};
 const _const = {type: 'const'};
+const _class = {type: 'class'};
 const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
@@ -185,9 +187,8 @@ function parseStatement() {
         case _func:
             next();
             return parseFunction(node, true);
-        case _slash:
-            next();
-            return node;
+        case _class:
+            return parseClassDeclaration(node);
         case _braceL:
             return parseBlock();
         case _return:
@@ -298,11 +299,12 @@ function parseBasicExpression() {
             } else {
                 exprList = [];
             }
+            let oldLastPos = tokStart;
             expected(_parenR);
             if (tokType === _arrow) {
                 return parseArrowFunction(node, exprList);
             } else if (!val) {
-                unexpected();
+                unexpected(oldLastPos);
             }
             return val;
         case _braceL:
@@ -362,6 +364,13 @@ function parseVarStatement(node) {
     const n = parseVar(node);
     semicolon();
     return finishNode(n, 'VariableDeclaration');
+}
+
+function parseClassDeclaration(node) {
+    next();
+    node.init = parseIdent();
+
+    return finishNode(node, 'ClassDeclaration')
 }
 
 function parseBlock(allowStrict) {
@@ -1005,6 +1014,28 @@ function initTokenState() {
     allowRegexp = true;
 }
 
+function getLineInfo(input, offset) {
+    let line = 1;
+    let column = 0;
+    lineBreak.lastIndex = 0;
+    for (let cur = 0; ;) {
+        const match = lineBreak.exec(input);
+        if (match && match.index < offset) {
+            line++;
+            cur = lineBreak.lastIndex;
+        } else {
+            column = offset - cur;
+            break
+        }
+    }
+
+    return {
+        line,
+        column
+    }
+
+}
+
 function expected(type) {
     if (tokType === type) {
         next()
@@ -1013,12 +1044,14 @@ function expected(type) {
     }
 }
 
-function unexpected() {
-    raise(tokStart, 'Unexpected token')
+function unexpected(pos) {
+    const p = pos ? pos : tokStart;
+    raise(p, 'Unexpected token')
 }
 
 function raise(pos, message) {
-    message = `(${pos})${message}`;
+    const {line, column} = getLineInfo(input, pos);
+    message = `${message}(${line}:${column})`;
     throw new SyntaxError(message);
 }
 
