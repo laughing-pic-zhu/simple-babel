@@ -340,7 +340,13 @@ function parseIdent(flag) {
 }
 
 function parseFunction(node, isStatement) {
-    node.id = tokType === _name ? parseIdent() : null;
+    if (tokType === _name) {
+        node.id = parseIdent();
+    } else if (!isStatement) {
+        node.id = null;
+    } else {
+        unexpected();
+    }
     expected(_parenL);
     node.params = [];
     let first = true;
