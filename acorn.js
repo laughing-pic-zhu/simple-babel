@@ -13,8 +13,8 @@ let allowRegexp = true;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|class|constructor|extends|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
-const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|static|yield)$/;
+const keywords = /^(?:var|const|let|class|constructor|extends|static|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
+const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
@@ -39,6 +39,9 @@ const _var = {type: 'var'};
 const _let = {type: 'let'};
 const _const = {type: 'const'};
 const _class = {type: 'class'};
+const _extends = {type: 'extend'};
+const _static = {type: 'static'};
+const _construction = {type: 'construction'};
 const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
@@ -107,6 +110,10 @@ const keywordTypes = {
     'var': _var,
     'const': _const,
     'let': _let,
+    'class': _class,
+    'extends': _extends,
+    'static': _static,
+    'construction': _construction,
     'function': _func,
     'return': _return,
     'throw': _throw,
@@ -374,8 +381,27 @@ function parseVarStatement(node) {
 
 function parseClassDeclaration(node) {
     next();
-    node.init = parseIdent();
+    node.id = parseIdent();
+    node.superClass=eat(_extends)?parseExprSubscripts():null;
+    const bodyNode = startNode();
+    expected(_braceL);
+    bodyNode.body = [];
 
+    while (!eat(_braceR)) {
+        const methodNode = startNode();
+        methodNode.kind = 'method';
+        methodNode.computed = false;
+        if (tokType === _static) {
+            methodNode.static = true;
+            next();
+        } else {
+            methodNode.static = false;
+        }
+        methodNode.key = parseIdent();
+        methodNode.value = parseFunction(startNode(), false);
+        bodyNode.body.push(finishNode(methodNode, 'MethodDefinition'));
+    }
+    node.body = finishNode(bodyNode, 'ClassBody');
     return finishNode(node, 'ClassDeclaration')
 }
 
