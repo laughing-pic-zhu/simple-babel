@@ -8,6 +8,7 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 ### Statement
 
 - [x] VariableDeclaration
+- [x] ClassDeclaration
 - [x] FunctionDeclaration
 - [x] ExpressionStatement
 - [x] BlockStatement
@@ -44,6 +45,7 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 - [x] ArrayExpression
 - [x] ConditionalExpression
 - [x] NewExpression
+- [x] ArrowFunctionExpression
 - [x] Property
 - [x] Literal
 - [x] Identifier
