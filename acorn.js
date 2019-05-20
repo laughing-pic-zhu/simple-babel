@@ -10,10 +10,11 @@ let lastEnd = 0;
 let strict = false;
 let inFunction = false;
 let allowRegexp = true;
+let allowSuper = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|class|constructor|extends|static|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
+const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
@@ -41,7 +42,8 @@ const _const = {type: 'const'};
 const _class = {type: 'class'};
 const _extends = {type: 'extend'};
 const _static = {type: 'static'};
-const _construction = {type: 'construction'};
+const _constructor = {type: 'constructor'};
+const _super = {type: 'super'};
 const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
 const _eq = {type: 'isAssign'};
@@ -113,7 +115,8 @@ const keywordTypes = {
     'class': _class,
     'extends': _extends,
     'static': _static,
-    'construction': _construction,
+    'constructor': _constructor,
+    'super': _super,
     'function': _func,
     'return': _return,
     'throw': _throw,
@@ -296,6 +299,12 @@ function parseBasicExpression() {
                 return parseArrowFunction(node, [node]);
             }
             return node;
+        case _super:
+            if (!allowSuper) {
+                unexpected();
+            }
+            next()
+            return finishNode(node, 'Super');
         case _parenL:
             next();
             let val;
@@ -382,14 +391,13 @@ function parseVarStatement(node) {
 function parseClassDeclaration(node) {
     next();
     node.id = parseIdent();
-    node.superClass=eat(_extends)?parseExprSubscripts():null;
+    node.superClass = eat(_extends) ? parseExprSubscripts() : null;
     const bodyNode = startNode();
     expected(_braceL);
     bodyNode.body = [];
-
     while (!eat(_braceR)) {
         const methodNode = startNode();
-        methodNode.kind = 'method';
+        methodNode.kind = tokType === _constructor ? 'constructor' : 'method';
         methodNode.computed = false;
         if (tokType === _static) {
             methodNode.static = true;
@@ -397,8 +405,10 @@ function parseClassDeclaration(node) {
         } else {
             methodNode.static = false;
         }
-        methodNode.key = parseIdent();
+        methodNode.key = parseIdent(tokType === _constructor);
+        allowSuper = node.superClass !== null;
         methodNode.value = parseFunction(startNode(), false);
+        allowSuper = false;
         bodyNode.body.push(finishNode(methodNode, 'MethodDefinition'));
     }
     node.body = finishNode(bodyNode, 'ClassBody');
