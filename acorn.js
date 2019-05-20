@@ -374,7 +374,18 @@ function parseFunction(node, isStatement) {
         } else {
             expected(_comma);
         }
-        node.params.push(parseIdent());
+        let n;
+        const iden = parseIdent();
+        if (tokType === _eq) {
+            n = copyNodeStart(iden);
+            n.left = iden;
+            next();
+            n.right = parseExpression();
+            finishNode(n, 'AssignmentPattern');
+        } else {
+            n = iden;
+        }
+        node.params.push(n);
     }
     var oldInFunc = inFunction;
     inFunction = true;

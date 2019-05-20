@@ -49,6 +49,8 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 - [x] Property
 - [x] Literal
 - [x] Identifier
+- [x] AssignmentPattern
+
 
 ## How to test
  
