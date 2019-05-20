@@ -77,6 +77,8 @@ test('test class function', () => {
                                             {
                                                 type: 'FunctionExpression',
                                                 start: 33,
+                                                expression: false,
+                                                generator: false,
                                                 id: null,
                                                 params:
                                                     [{type: 'Identifier', start: 34, name: 'a', end: 35},
@@ -98,6 +100,8 @@ test('test class function', () => {
                                                 {
                                                     type: 'FunctionExpression',
                                                     start: 52,
+                                                    expression: false,
+                                                    generator: false,
                                                     id: null,
                                                     params: [],
                                                     body: {type: 'BlockStatement', start: 54, body: [], end: 56},
@@ -139,6 +143,8 @@ test('test class function', () => {
                                             {
                                                 type: 'FunctionExpression',
                                                 start: 31,
+                                                expression: false,
+                                                generator: false,
                                                 id: null,
                                                 params:
                                                     [{type: 'Identifier', start: 32, name: 'a', end: 33},

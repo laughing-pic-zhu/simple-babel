@@ -47,6 +47,8 @@ test('test statement', () => {
                 [{
                     type: 'FunctionDeclaration',
                     start: 0,
+                    expression: false,
+                    generator: false,
                     id: {type: 'Identifier', start: 9, name: 'a', end: 10},
                     params:
                         [{type: 'Identifier', start: 11, name: 'b', end: 12},
@@ -123,6 +125,8 @@ test('test statement', () => {
                 [{
                     type: 'FunctionDeclaration',
                     start: 0,
+                    expression: false,
+                    generator: false,
                     id: {type: 'Identifier', start: 9, name: 'a', end: 10},
                     params: [],
                     body:

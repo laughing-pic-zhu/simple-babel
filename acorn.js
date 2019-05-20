@@ -365,6 +365,8 @@ function parseFunction(node, isStatement) {
     }
     expected(_parenL);
     node.params = [];
+    node.expression = false;
+    node.generator = false;
     let first = true;
     while (!eat(_parenR)) {
         if (first) {
