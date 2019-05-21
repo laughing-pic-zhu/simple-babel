@@ -473,23 +473,35 @@ function parseObj() {
             }
         }
         const n = startNode();
-        n.method = false;
         n.shorthand = false;
         n.computed = false;
         n.kind = 'init';
-        n.key = parsePropertyName();
-        expected(_colon);
-        n.value = parseExpression(true);
+        parsePropertyName(n);
+        n.method = tokType !== _colon;
+        if (tokType === _colon) {
+            next();
+            n.value = parseExpression(true);
+        } else {
+            n.value = parseFunction(startNode(), false);
+        }
         node.properties.push(finishNode(n, 'Property'));
     }
     return finishNode(node, 'ObjectExpression');
 }
 
-function parsePropertyName() {
-    if (tokType === _num || tokType === _name) {
-        return parseBasicExpression();
+function parsePropertyName(node) {
+    if (eat(_bracketL)) {
+        node.key = parseExpression(true);
+        node.computed = true;
+        expected(_bracketR);
+    } else {
+        node.computed = false;
+        if (tokType === _num || tokType === _name) {
+            node.key = parseBasicExpression();
+        } else {
+            node.key = parseIdent(true);
+        }
     }
-    return parseIdent(true);
 }
 
 function parseArray() {
