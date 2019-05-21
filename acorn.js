@@ -489,6 +489,12 @@ function parseObj() {
             n.method = true;
             n.value = parseFunction(startNode(), false);
         }
+
+        if (n.kind === 'set' && n.value.params.length !== 1) {
+            raise(n.value.start, 'setter should have exactly one param');
+        } else if (n.kind === 'get' && n.value.params.length !== 0) {
+            raise(n.value.start, 'getter should have no params');
+        }
         node.properties.push(finishNode(n, 'Property'));
     }
     return finishNode(node, 'ObjectExpression');
