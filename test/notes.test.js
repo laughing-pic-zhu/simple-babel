@@ -98,7 +98,7 @@ test('test notes', () => {
                 [{
                     type: 'IfStatement',
                     start: 0,
-                    test: {type: 'Identifier', start: 3, value: 'a', end: 4},
+                    test: {type: 'Identifier', start: 3, name: 'a', end: 4},
                     consequent:
                         {
                             type: 'BlockStatement',
@@ -107,7 +107,7 @@ test('test notes', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 10,
-                                    expression: {type: 'Identifier', start: 10, value: 'xxx', end: 13},
+                                    expression: {type: 'Identifier', start: 10, name: 'xxx', end: 13},
                                     end: 13
                                 }],
                             end: 14
@@ -170,17 +170,17 @@ test('test notes', () => {
                 [{
                     type: 'SwitchStatement',
                     start: 0,
-                    discriminant: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                    discriminant: {type: 'Identifier', start: 7, name: 'a', end: 8},
                     cases:
                         [{
                             type: 'SwitchCase',
                             start: 10,
-                            test: {type: 'Identifier', start: 15, value: 'a', end: 16},
+                            test: {type: 'Identifier', start: 15, name: 'a', end: 16},
                             consequent:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 24,
-                                    expression: {type: 'Identifier', start: 24, value: 'b', end: 25},
+                                    expression: {type: 'Identifier', start: 24, name: 'b', end: 25},
                                     end: 26
                                 }],
                             end: 26
@@ -199,7 +199,7 @@ test('test notes', () => {
                 [{
                     type: 'IfStatement',
                     start: 0,
-                    test: {type: 'Identifier', start: 3, value: 'a', end: 4},
+                    test: {type: 'Identifier', start: 3, name: 'a', end: 4},
                     consequent:
                         {
                             type: 'BlockStatement',
@@ -208,13 +208,13 @@ test('test notes', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 12,
-                                    expression: {type: 'Identifier', start: 12, value: 'a', end: 13},
+                                    expression: {type: 'Identifier', start: 12, name: 'a', end: 13},
                                     end: 14
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 14,
-                                        expression: {type: 'Identifier', start: 14, value: 'b', end: 15},
+                                        expression: {type: 'Identifier', start: 14, name: 'b', end: 15},
                                         end: 15
                                     }],
                             end: 16

@@ -31,7 +31,7 @@ test('test class function', () => {
                             {
                                 start: 16,
                                 type: 'MemberExpression',
-                                object: {type: 'Identifier', start: 16, value: 'b', end: 17},
+                                object: {type: 'Identifier', start: 16, name: 'b', end: 17},
                                 property: {type: 'Identifier', start: 18, name: 'c', end: 19},
                                 computed: false,
                                 end: 19
@@ -56,7 +56,7 @@ test('test class function', () => {
                             {
                                 start: 16,
                                 type: 'MemberExpression',
-                                object: {type: 'Identifier', start: 16, value: 'b', end: 17},
+                                object: {type: 'Identifier', start: 16, name: 'b', end: 17},
                                 property: {type: 'Identifier', start: 18, name: 'c', end: 19},
                                 computed: false,
                                 end: 19
@@ -126,7 +126,7 @@ test('test class function', () => {
                         type: 'ClassDeclaration',
                         start: 0,
                         id: {type: 'Identifier', start: 6, name: 'A', end: 7},
-                        superClass: {type: 'Identifier', start: 16, value: 'B', end: 17},
+                        superClass: {type: 'Identifier', start: 16, name: 'B', end: 17},
                         body:
                             {
                                 type: 'ClassBody',

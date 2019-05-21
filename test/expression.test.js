@@ -51,7 +51,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right: {type: 'ArrayExpression', start: 4, elements: [], end: 6},
                             end: 6
@@ -74,7 +74,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -103,7 +103,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -135,7 +135,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -168,7 +168,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right: {type: 'ObjectExpression', start: 4, properties: [], end: 6},
                             end: 6
@@ -191,7 +191,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right: {type: 'ObjectExpression', start: 4, properties: [], end: 7},
                             end: 7
@@ -214,7 +214,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -254,7 +254,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -294,7 +294,7 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'AssignmentExpression',
-                            left: {type: 'Identifier', start: 0, value: 'x', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
                             operator: '=',
                             right:
                                 {
@@ -308,7 +308,7 @@ test('test expression', () => {
                                             shorthand: false,
                                             computed: false,
                                             kind: 'init',
-                                            key: {type: 'Identifier', start: 6, value: 'x', end: 7},
+                                            key: {type: 'Identifier', start: 6, name: 'x', end: 7},
                                             value: {type: 'Literal', start: 9, value: 1, raw: '1', end: 10},
                                             end: 10
                                         },
@@ -319,7 +319,7 @@ test('test expression', () => {
                                                 shorthand: false,
                                                 computed: false,
                                                 kind: 'init',
-                                                key: {type: 'Identifier', start: 12, value: 'x', end: 13},
+                                                key: {type: 'Identifier', start: 12, name: 'x', end: 13},
                                                 value: {type: 'Literal', start: 15, value: 2, raw: '2', end: 16},
                                                 end: 16
                                             }],
@@ -351,7 +351,7 @@ test('test expression', () => {
                                 {
                                     start: 7,
                                     type: 'MemberExpression',
-                                    object: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                                    object: {type: 'Identifier', start: 7, name: 'a', end: 8},
                                     property: {type: 'Identifier', start: 9, name: 'b', end: 10},
                                     computed: false,
                                     end: 10
@@ -387,7 +387,7 @@ test('test expression', () => {
                                         {
                                             start: 7,
                                             type: 'MemberExpression',
-                                            object: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                                            object: {type: 'Identifier', start: 7, name: 'a', end: 8},
                                             property: {type: 'Identifier', start: 9, name: 'b', end: 10},
                                             computed: false,
                                             end: 10
@@ -416,7 +416,7 @@ test('test expression', () => {
                             start: 0,
                             prefix: true,
                             operator: 'void',
-                            argument: {type: 'Identifier', start: 5, value: 'a', end: 6},
+                            argument: {type: 'Identifier', start: 5, name: 'a', end: 6},
                             end: 6
                         },
                     end: 6
@@ -437,13 +437,13 @@ test('test expression', () => {
                         {
                             start: 0,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                             operator: 'instanceof',
                             right:
                                 {
                                     start: 13,
                                     type: 'MemberExpression',
-                                    object: {type: 'Identifier', start: 13, value: 'b', end: 14},
+                                    object: {type: 'Identifier', start: 13, name: 'b', end: 14},
                                     property: {type: 'Identifier', start: 15, name: 'c', end: 16},
                                     computed: false,
                                     end: 16

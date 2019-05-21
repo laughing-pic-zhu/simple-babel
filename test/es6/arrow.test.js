@@ -17,10 +17,10 @@ test('test arrow function', () => {
                                 expression: true,
                                 generator: false,
                                 params:
-                                    [{type: 'Identifier', start: 1, value: 'a', end: 2},
-                                        {type: 'Identifier', start: 3, value: 'b', end: 4},
-                                        {type: 'Identifier', start: 5, value: 'c', end: 6}],
-                                body: {type: 'Identifier', start: 9, value: 'b', end: 10},
+                                    [{type: 'Identifier', start: 1, name: 'a', end: 2},
+                                        {type: 'Identifier', start: 3, name: 'b', end: 4},
+                                        {type: 'Identifier', start: 5, name: 'c', end: 6}],
+                                body: {type: 'Identifier', start: 9, name: 'b', end: 10},
                                 end: 10
                             },
                         end: 10
@@ -44,8 +44,8 @@ test('test arrow function', () => {
                                 id: null,
                                 expression: true,
                                 generator: false,
-                                params: [{type: 'Identifier', start: 1, value: 'a', end: 2}],
-                                body: {type: 'Identifier', start: 5, value: 'b', end: 6},
+                                params: [{type: 'Identifier', start: 1, name: 'a', end: 2}],
+                                body: {type: 'Identifier', start: 5, name: 'b', end: 6},
                                 end: 6
                             },
                         end: 6
@@ -70,7 +70,7 @@ test('test arrow function', () => {
                                 expression: true,
                                 generator: false,
                                 params: [],
-                                body: {type: 'Identifier', start: 4, value: 'b', end: 5},
+                                body: {type: 'Identifier', start: 4, name: 'b', end: 5},
                                 end: 5
                             },
                         end: 5
@@ -94,8 +94,8 @@ test('test arrow function', () => {
                                 id: null,
                                 expression: true,
                                 generator: false,
-                                params: [{type: 'Identifier', start: 0, value: 'a', end: 1}],
-                                body: {type: 'Identifier', start: 3, value: 'b', end: 4},
+                                params: [{type: 'Identifier', start: 0, name: 'a', end: 1}],
+                                body: {type: 'Identifier', start: 3, name: 'b', end: 4},
                                 end: 4
                             },
                         end: 4
@@ -118,7 +118,7 @@ test('test arrow function', () => {
                                 type: 'ArrowFunctionExpression',
                                 id: null,
                                 generator: false,
-                                params: [{type: 'Identifier', start: 0, value: 'a', end: 1}],
+                                params: [{type: 'Identifier', start: 0, name: 'a', end: 1}],
                                 expression: false,
                                 body:
                                     {
@@ -128,7 +128,7 @@ test('test arrow function', () => {
                                             [{
                                                 type: 'ExpressionStatement',
                                                 start: 4,
-                                                expression: {type: 'Identifier', start: 4, value: 'b', end: 5},
+                                                expression: {type: 'Identifier', start: 4, name: 'b', end: 5},
                                                 end: 5
                                             }],
                                         end: 6

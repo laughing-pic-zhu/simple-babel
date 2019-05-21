@@ -292,13 +292,11 @@ function parseBasicExpression() {
             next();
             return finishNode(node, 'Literal');
         case _name:
-            node.value = tokVal;
-            next();
-            finishNode(node, 'Identifier')
+            const n = parseIdent();
             if (tokType === _arrow) {
-                return parseArrowFunction(node, [node]);
+                return parseArrowFunction(n, [n]);
             }
-            return node;
+            return n;
         case _super:
             if (!allowSuper) {
                 unexpected();
@@ -475,13 +473,20 @@ function parseObj() {
         const n = startNode();
         n.shorthand = false;
         n.computed = false;
-        n.kind = 'init';
+
         parsePropertyName(n);
-        n.method = tokType !== _colon;
+        if ((n.key.name === 'set' || n.key.name === 'get') && tokType === _name) {
+            n.kind = n.key.name;
+            parsePropertyName(n);
+        } else {
+            n.kind = 'init';
+        }
         if (tokType === _colon) {
+            n.method = false;
             next();
             n.value = parseExpression(true);
         } else {
+            n.method = true;
             n.value = parseFunction(startNode(), false);
         }
         node.properties.push(finishNode(n, 'Property'));

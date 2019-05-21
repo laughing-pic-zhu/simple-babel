@@ -148,16 +148,16 @@ test('test block bind', () => {
                             {
                                 start: 16,
                                 type: 'BinaryExpression',
-                                left: {type: 'Identifier', start: 16, value: 'a', end: 17},
+                                left: {type: 'Identifier', start: 16, name: 'a', end: 17},
                                 operator: '<',
-                                right: {type: 'Identifier', start: 18, value: 'b', end: 19},
+                                right: {type: 'Identifier', start: 18, name: 'b', end: 19},
                                 end: 19
                             },
                         update:
                             {
                                 start: 20,
                                 type: 'UpdateExpression',
-                                argument: {type: 'Identifier', start: 20, value: 'a', end: 21},
+                                argument: {type: 'Identifier', start: 20, name: 'a', end: 21},
                                 operator: '++',
                                 prefix: false,
                                 end: 23
@@ -192,7 +192,7 @@ test('test block bind', () => {
                                     }],
                                 end: 9
                             },
-                        right: {type: 'Identifier', start: 13, value: 'b', end: 14},
+                        right: {type: 'Identifier', start: 13, name: 'b', end: 14},
                         body: {type: 'BlockStatement', start: 15, body: [], end: 17},
                         end: 17
                     }],

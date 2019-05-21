@@ -52,7 +52,7 @@ test('test default params', () => {
                                             {
                                                 start: 15,
                                                 type: 'AssignmentExpression',
-                                                left: {type: 'Identifier', start: 15, value: 'c', end: 16},
+                                                left: {type: 'Identifier', start: 15, name: 'c', end: 16},
                                                 operator: '=',
                                                 right:
                                                     {

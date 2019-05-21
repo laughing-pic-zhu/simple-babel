@@ -61,19 +61,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 17,
-                                    expression: {type: 'Identifier', start: 17, value: 'e', end: 18},
+                                    expression: {type: 'Identifier', start: 17, name: 'e', end: 18},
                                     end: 19
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 19,
-                                        expression: {type: 'Identifier', start: 19, value: 'f', end: 20},
+                                        expression: {type: 'Identifier', start: 19, name: 'f', end: 20},
                                         end: 21
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 21,
-                                        expression: {type: 'Identifier', start: 21, value: 'g', end: 22},
+                                        expression: {type: 'Identifier', start: 21, name: 'g', end: 22},
                                         end: 23
                                     }],
                             end: 25
@@ -96,19 +96,19 @@ test('test statement', () => {
                         [{
                             type: 'ExpressionStatement',
                             start: 1,
-                            expression: {type: 'Identifier', start: 1, value: 'e', end: 2},
+                            expression: {type: 'Identifier', start: 1, name: 'e', end: 2},
                             end: 3
                         },
                             {
                                 type: 'ExpressionStatement',
                                 start: 3,
-                                expression: {type: 'Identifier', start: 3, value: 'f', end: 4},
+                                expression: {type: 'Identifier', start: 3, name: 'f', end: 4},
                                 end: 5
                             },
                             {
                                 type: 'ExpressionStatement',
                                 start: 5,
-                                expression: {type: 'Identifier', start: 5, value: 'g', end: 6},
+                                expression: {type: 'Identifier', start: 5, name: 'g', end: 6},
                                 end: 6
                             }],
                     end: 7
@@ -160,7 +160,7 @@ test('test statement', () => {
                         {
                             start: 6,
                             type: 'MemberExpression',
-                            object: {type: 'Identifier', start: 6, value: 'a', end: 7},
+                            object: {type: 'Identifier', start: 6, name: 'a', end: 7},
                             property: {type: 'Identifier', start: 8, name: 'b', end: 9},
                             computed: false,
                             end: 9
@@ -180,7 +180,7 @@ test('test statement', () => {
                 [{
                     type: 'IfStatement',
                     start: 0,
-                    test: {type: 'Identifier', start: 3, value: 'a', end: 4},
+                    test: {type: 'Identifier', start: 3, name: 'a', end: 4},
                     consequent:
                         {
                             type: 'BlockStatement',
@@ -189,7 +189,7 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 8,
-                                    expression: {type: 'Identifier', start: 8, value: 'e', end: 9},
+                                    expression: {type: 'Identifier', start: 8, name: 'e', end: 9},
                                     end: 9
                                 }],
                             end: 11
@@ -198,7 +198,7 @@ test('test statement', () => {
                         {
                             type: 'IfStatement',
                             start: 16,
-                            test: {type: 'Identifier', start: 19, value: 'b', end: 20},
+                            test: {type: 'Identifier', start: 19, name: 'b', end: 20},
                             consequent:
                                 {
                                     type: 'BlockStatement',
@@ -207,7 +207,7 @@ test('test statement', () => {
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 24,
-                                            expression: {type: 'Identifier', start: 24, value: 'f', end: 25},
+                                            expression: {type: 'Identifier', start: 24, name: 'f', end: 25},
                                             end: 25
                                         }],
                                     end: 27
@@ -220,7 +220,7 @@ test('test statement', () => {
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 34,
-                                            expression: {type: 'Identifier', start: 34, value: 'g', end: 35},
+                                            expression: {type: 'Identifier', start: 34, name: 'g', end: 35},
                                             end: 35
                                         }],
                                     end: 37
@@ -241,29 +241,29 @@ test('test statement', () => {
                 [{
                     type: 'SwitchStatement',
                     start: 0,
-                    discriminant: {type: 'Identifier', start: 7, value: 'a', end: 8},
+                    discriminant: {type: 'Identifier', start: 7, name: 'a', end: 8},
                     cases:
                         [{
                             type: 'SwitchCase',
                             start: 12,
-                            test: {type: 'Identifier', start: 17, value: 'b', end: 18},
+                            test: {type: 'Identifier', start: 17, name: 'b', end: 18},
                             consequent:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 23,
-                                    expression: {type: 'Identifier', start: 23, value: 'e', end: 24},
+                                    expression: {type: 'Identifier', start: 23, name: 'e', end: 24},
                                     end: 25
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 25,
-                                        expression: {type: 'Identifier', start: 25, value: 'f', end: 26},
+                                        expression: {type: 'Identifier', start: 25, name: 'f', end: 26},
                                         end: 27
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 27,
-                                        expression: {type: 'Identifier', start: 27, value: 'g', end: 28},
+                                        expression: {type: 'Identifier', start: 27, name: 'g', end: 28},
                                         end: 29
                                     }],
                             end: 29
@@ -271,31 +271,31 @@ test('test statement', () => {
                             {
                                 type: 'SwitchCase',
                                 start: 32,
-                                test: {type: 'Identifier', start: 37, value: 'c', end: 38},
+                                test: {type: 'Identifier', start: 37, name: 'c', end: 38},
                                 consequent: [],
                                 end: 39
                             },
                             {
                                 type: 'SwitchCase',
                                 start: 41,
-                                test: {type: 'Identifier', start: 46, value: 'd', end: 47},
+                                test: {type: 'Identifier', start: 46, name: 'd', end: 47},
                                 consequent:
                                     [{
                                         type: 'ExpressionStatement',
                                         start: 51,
-                                        expression: {type: 'Identifier', start: 51, value: 'e', end: 52},
+                                        expression: {type: 'Identifier', start: 51, name: 'e', end: 52},
                                         end: 53
                                     },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 53,
-                                            expression: {type: 'Identifier', start: 53, value: 'f', end: 54},
+                                            expression: {type: 'Identifier', start: 53, name: 'f', end: 54},
                                             end: 55
                                         },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 55,
-                                            expression: {type: 'Identifier', start: 55, value: 'g', end: 56},
+                                            expression: {type: 'Identifier', start: 55, name: 'g', end: 56},
                                             end: 57
                                         }],
                                 end: 57
@@ -308,19 +308,19 @@ test('test statement', () => {
                                     [{
                                         type: 'ExpressionStatement',
                                         start: 71,
-                                        expression: {type: 'Identifier', start: 71, value: 'e', end: 72},
+                                        expression: {type: 'Identifier', start: 71, name: 'e', end: 72},
                                         end: 73
                                     },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 73,
-                                            expression: {type: 'Identifier', start: 73, value: 'f', end: 74},
+                                            expression: {type: 'Identifier', start: 73, name: 'f', end: 74},
                                             end: 75
                                         },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 75,
-                                            expression: {type: 'Identifier', start: 75, value: 'g', end: 76},
+                                            expression: {type: 'Identifier', start: 75, name: 'g', end: 76},
                                             end: 77
                                         }],
                                 end: 77
@@ -413,16 +413,16 @@ test('test statement', () => {
                         {
                             start: 10,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 10, value: 'a', end: 11},
+                            left: {type: 'Identifier', start: 10, name: 'a', end: 11},
                             operator: '<',
-                            right: {type: 'Identifier', start: 12, value: 'b', end: 13},
+                            right: {type: 'Identifier', start: 12, name: 'b', end: 13},
                             end: 13
                         },
                     update:
                         {
                             start: 14,
                             type: 'UpdateExpression',
-                            argument: {type: 'Identifier', start: 14, value: 'a', end: 15},
+                            argument: {type: 'Identifier', start: 14, name: 'a', end: 15},
                             operator: '++',
                             prefix: false,
                             end: 17
@@ -435,19 +435,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 21,
-                                    expression: {type: 'Identifier', start: 21, value: 'e', end: 22},
+                                    expression: {type: 'Identifier', start: 21, name: 'e', end: 22},
                                     end: 23
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 25,
-                                        expression: {type: 'Identifier', start: 25, value: 'f', end: 26},
+                                        expression: {type: 'Identifier', start: 25, name: 'f', end: 26},
                                         end: 27
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 29,
-                                        expression: {type: 'Identifier', start: 29, value: 'g', end: 30},
+                                        expression: {type: 'Identifier', start: 29, name: 'g', end: 30},
                                         end: 30
                                     }],
                             end: 32
@@ -480,7 +480,7 @@ test('test statement', () => {
                                 }],
                             end: 9
                         },
-                    right: {type: 'Identifier', start: 13, value: 'b', end: 14},
+                    right: {type: 'Identifier', start: 13, name: 'b', end: 14},
                     body:
                         {
                             type: 'BlockStatement',
@@ -489,19 +489,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 18,
-                                    expression: {type: 'Identifier', start: 18, value: 'e', end: 19},
+                                    expression: {type: 'Identifier', start: 18, name: 'e', end: 19},
                                     end: 20
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 22,
-                                        expression: {type: 'Identifier', start: 22, value: 'f', end: 23},
+                                        expression: {type: 'Identifier', start: 22, name: 'f', end: 23},
                                         end: 24
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 26,
-                                        expression: {type: 'Identifier', start: 26, value: 'g', end: 27},
+                                        expression: {type: 'Identifier', start: 26, name: 'g', end: 27},
                                         end: 27
                                     }],
                             end: 29
@@ -523,9 +523,9 @@ test('test statement', () => {
                         {
                             start: 6,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 6, value: 'a', end: 7},
+                            left: {type: 'Identifier', start: 6, name: 'a', end: 7},
                             operator: '===',
-                            right: {type: 'Identifier', start: 10, value: 'b', end: 11},
+                            right: {type: 'Identifier', start: 10, name: 'b', end: 11},
                             end: 11
                         },
                     body:
@@ -536,19 +536,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 15,
-                                    expression: {type: 'Identifier', start: 15, value: 'e', end: 16},
+                                    expression: {type: 'Identifier', start: 15, name: 'e', end: 16},
                                     end: 17
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 19,
-                                        expression: {type: 'Identifier', start: 19, value: 'f', end: 20},
+                                        expression: {type: 'Identifier', start: 19, name: 'f', end: 20},
                                         end: 21
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 23,
-                                        expression: {type: 'Identifier', start: 23, value: 'g', end: 24},
+                                        expression: {type: 'Identifier', start: 23, name: 'g', end: 24},
                                         end: 24
                                     }],
                             end: 26
@@ -574,19 +574,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 5,
-                                    expression: {type: 'Identifier', start: 5, value: 'e', end: 6},
+                                    expression: {type: 'Identifier', start: 5, name: 'e', end: 6},
                                     end: 7
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 9,
-                                        expression: {type: 'Identifier', start: 9, value: 'f', end: 10},
+                                        expression: {type: 'Identifier', start: 9, name: 'f', end: 10},
                                         end: 11
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 13,
-                                        expression: {type: 'Identifier', start: 13, value: 'g', end: 14},
+                                        expression: {type: 'Identifier', start: 13, name: 'g', end: 14},
                                         end: 14
                                     }],
                             end: 16
@@ -595,9 +595,9 @@ test('test statement', () => {
                         {
                             start: 22,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 22, value: 'a', end: 23},
+                            left: {type: 'Identifier', start: 22, name: 'a', end: 23},
                             operator: '===',
-                            right: {type: 'Identifier', start: 26, value: 'b', end: 27},
+                            right: {type: 'Identifier', start: 26, name: 'b', end: 27},
                             end: 27
                         },
                     end: 28
@@ -631,19 +631,19 @@ test('test statement', () => {
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 6,
-                                    expression: {type: 'Identifier', start: 6, value: 'e', end: 7},
+                                    expression: {type: 'Identifier', start: 6, name: 'e', end: 7},
                                     end: 8
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 10,
-                                        expression: {type: 'Identifier', start: 10, value: 'f', end: 11},
+                                        expression: {type: 'Identifier', start: 10, name: 'f', end: 11},
                                         end: 12
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 14,
-                                        expression: {type: 'Identifier', start: 14, value: 'g', end: 15},
+                                        expression: {type: 'Identifier', start: 14, name: 'g', end: 15},
                                         end: 15
                                     }],
                             end: 17
@@ -661,19 +661,19 @@ test('test statement', () => {
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 28,
-                                            expression: {type: 'Identifier', start: 28, value: 'e', end: 29},
+                                            expression: {type: 'Identifier', start: 28, name: 'e', end: 29},
                                             end: 30
                                         },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 32,
-                                                expression: {type: 'Identifier', start: 32, value: 'f', end: 33},
+                                                expression: {type: 'Identifier', start: 32, name: 'f', end: 33},
                                                 end: 34
                                             },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 36,
-                                                expression: {type: 'Identifier', start: 36, value: 'g', end: 37},
+                                                expression: {type: 'Identifier', start: 36, name: 'g', end: 37},
                                                 end: 37
                                             }],
                                     end: 39
@@ -692,19 +692,19 @@ test('test statement', () => {
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 49,
-                                            expression: {type: 'Identifier', start: 49, value: 'e', end: 50},
+                                            expression: {type: 'Identifier', start: 49, name: 'e', end: 50},
                                             end: 51
                                         },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 53,
-                                                expression: {type: 'Identifier', start: 53, value: 'f', end: 54},
+                                                expression: {type: 'Identifier', start: 53, name: 'f', end: 54},
                                                 end: 55
                                             },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 57,
-                                                expression: {type: 'Identifier', start: 57, value: 'g', end: 58},
+                                                expression: {type: 'Identifier', start: 57, name: 'g', end: 58},
                                                 end: 58
                                             }],
                                     end: 60
@@ -729,12 +729,12 @@ test('test statement', () => {
                         [{
                             type: 'LabeledStatement',
                             start: 1,
-                            label: {type: 'Identifier', start: 1, value: 'a', end: 2},
+                            label: {type: 'Identifier', start: 1, name: 'a', end: 2},
                             body:
                                 {
                                     type: 'ExpressionStatement',
                                     start: 3,
-                                    expression: {type: 'Identifier', start: 3, value: 'b', end: 4},
+                                    expression: {type: 'Identifier', start: 3, name: 'b', end: 4},
                                     end: 4
                                 },
                             end: 4

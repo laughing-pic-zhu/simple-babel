@@ -15,7 +15,7 @@ test('test atom type', () => {
                             start: 0,
                             prefix: true,
                             operator: '+',
-                            argument: {type: 'Identifier', start: 1, value: 'a', end: 2},
+                            argument: {type: 'Identifier', start: 1, name: 'a', end: 2},
                             end: 2
                         },
                     end: 2
@@ -38,7 +38,7 @@ test('test atom type', () => {
                             start: 0,
                             prefix: true,
                             operator: '++',
-                            argument: {type: 'Identifier', start: 2, value: 'a', end: 3},
+                            argument: {type: 'Identifier', start: 2, name: 'a', end: 3},
                             end: 3
                         },
                     end: 3
@@ -61,7 +61,7 @@ test('test atom type', () => {
                             type: 'BinaryExpression',
                             left: {type: 'Literal', start: 0, value: 1, raw: '1', end: 1},
                             operator: '*',
-                            right: {type: 'Identifier', start: 2, value: 'a', end: 3},
+                            right: {type: 'Identifier', start: 2, name: 'a', end: 3},
                             end: 3
                         },
                     end: 3
@@ -86,7 +86,7 @@ test('test atom type', () => {
                                 {
                                     start: 0,
                                     type: 'MemberExpression',
-                                    object: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                    object: {type: 'Identifier', start: 0, name: 'a', end: 1},
                                     property: {type: 'Identifier', start: 2, name: 'b', end: 3},
                                     computed: false,
                                     end: 3
@@ -122,7 +122,7 @@ test('test atom type', () => {
                                         {
                                             start: 0,
                                             type: 'MemberExpression',
-                                            object: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                            object: {type: 'Identifier', start: 0, name: 'a', end: 1},
                                             property: {type: 'Identifier', start: 2, name: 'b', end: 3},
                                             computed: false,
                                             end: 3
@@ -159,7 +159,7 @@ test('test atom type', () => {
                                     start: 1,
                                     prefix: true,
                                     operator: '++',
-                                    argument: {type: 'Identifier', start: 3, value: 'a', end: 4},
+                                    argument: {type: 'Identifier', start: 3, name: 'a', end: 4},
                                     end: 4
                                 },
                             end: 4
@@ -200,7 +200,7 @@ test('test atom type', () => {
                                                 {
                                                     start: 3,
                                                     type: 'UpdateExpression',
-                                                    argument: {type: 'Identifier', start: 3, value: 'a', end: 4},
+                                                    argument: {type: 'Identifier', start: 3, name: 'a', end: 4},
                                                     operator: '--',
                                                     prefix: false,
                                                     end: 6
@@ -229,9 +229,9 @@ test('test atom type', () => {
                         {
                             start: 0,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                             operator: '<',
-                            right: {type: 'Identifier', start: 4, value: 'b', end: 5},
+                            right: {type: 'Identifier', start: 4, name: 'b', end: 5},
                             end: 5
                         },
                     end: 5
@@ -256,21 +256,21 @@ test('test atom type', () => {
                                 {
                                     start: 0,
                                     type: 'BinaryExpression',
-                                    left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                    left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                                     operator: '+',
                                     right:
                                         {
                                             start: 2,
                                             type: 'BinaryExpression',
-                                            left: {type: 'Identifier', start: 2, value: 'b', end: 3},
+                                            left: {type: 'Identifier', start: 2, name: 'b', end: 3},
                                             operator: '*',
-                                            right: {type: 'Identifier', start: 4, value: 'c', end: 5},
+                                            right: {type: 'Identifier', start: 4, name: 'c', end: 5},
                                             end: 5
                                         },
                                     end: 5
                                 },
                             operator: '-',
-                            right: {type: 'Identifier', start: 6, value: 'd', end: 7},
+                            right: {type: 'Identifier', start: 6, name: 'd', end: 7},
                             end: 7
                         },
                     end: 7
@@ -295,13 +295,13 @@ test('test atom type', () => {
                                 {
                                     start: 0,
                                     type: 'BinaryExpression',
-                                    left: {type: 'Identifier', start: 0, value: 'b', end: 1},
+                                    left: {type: 'Identifier', start: 0, name: 'b', end: 1},
                                     operator: '*',
-                                    right: {type: 'Identifier', start: 2, value: 'c', end: 3},
+                                    right: {type: 'Identifier', start: 2, name: 'c', end: 3},
                                     end: 3
                                 },
                             operator: '+',
-                            right: {type: 'Identifier', start: 4, value: 'a', end: 5},
+                            right: {type: 'Identifier', start: 4, name: 'a', end: 5},
                             end: 5
                         },
                     end: 5
@@ -323,15 +323,15 @@ test('test atom type', () => {
                             {
                                 start: 0,
                                 type: 'BinaryExpression',
-                                left: {type: 'Identifier', start: 0, value: 'a', end: 1},
+                                left: {type: 'Identifier', start: 0, name: 'a', end: 1},
                                 operator: '+',
                                 right:
                                     {
                                         start: 2,
                                         type: 'BinaryExpression',
-                                        left: {type: 'Identifier', start: 2, value: 'b', end: 3},
+                                        left: {type: 'Identifier', start: 2, name: 'b', end: 3},
                                         operator: '*',
-                                        right: {type: 'Identifier', start: 4, value: 'c', end: 5},
+                                        right: {type: 'Identifier', start: 4, name: 'c', end: 5},
                                         end: 5
                                     },
                                 end: 5
