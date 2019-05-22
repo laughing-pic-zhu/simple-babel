@@ -14,7 +14,7 @@ let allowSuper = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof|export|as|from)$/;
+const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof|export|as|from|import)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
@@ -39,6 +39,7 @@ const _parenR = {type: ')'};
 const _export = {type: 'export'};
 const _as = {type: 'as'};
 const _from = {type: 'from'};
+const _import = {type: 'import'};
 const _var = {type: 'var'};
 const _let = {type: 'let'};
 const _const = {type: 'const'};
@@ -116,6 +117,7 @@ const keywordTypes = {
     'export': _export,
     'as': _as,
     'from': _from,
+    'import': _import,
     'var': _var,
     'const': _const,
     'let': _let,
@@ -257,6 +259,8 @@ function parseStatement() {
             return parseTry();
         case _export:
             return parseExportDeclaration();
+        case _import:
+            return parseImportDeclaration();
         default:
             const expr = parseExpression();
             if (lastTokType === _name && expr.type === 'Identifier' && eat(_colon)) {
@@ -460,8 +464,60 @@ function parseExportDeclaration() {
     } else {
         unexpected()
     }
-
     return finishNode(node, type)
+}
+
+function parseImportDeclaration() {
+    const node = startNode();
+    next();
+    node.specifiers = [];
+    if (tokType === _name) {
+        const n = startNode();
+        n.local = parseIdent();
+        node.specifiers.push(finishNode(n, 'ImportDefaultSpecifier'));
+        if (tokType === _comma) {
+            next();
+            parseImportSpecifier(node)
+        }
+    }
+    else if (tokType === _star) {
+        const n = startNode();
+        next();
+        expected(_as);
+        n.local = parseIdent();
+        node.specifiers.push(finishNode(n, 'ImportNamespaceSpecifier'))
+    } else {
+        parseImportSpecifier(node);
+    }
+    expected(_from);
+    node.source = tokType === _string ? parseBasicExpression() : unexpected();
+
+    semicolon();
+    return finishNode(node, 'ImportDeclaration');
+}
+
+function parseImportSpecifier(node) {
+    eat(_braceL);
+    let first = true;
+    while (!eat(_braceR)) {
+        if (first) {
+            first = false
+        } else {
+            expected(_comma);
+            if (eat(_braceR)) {
+                break;
+            }
+        }
+        const n = startNode();
+        n.imported = parseIdent();
+        if (tokType === _as) {
+            next();
+            n.local = parseIdent()
+        } else {
+            n.local = n.imported;
+        }
+        node.specifiers.push(finishNode(n, 'ImportSpecifier'));
+    }
 }
 
 function parseVarStatement(node) {
