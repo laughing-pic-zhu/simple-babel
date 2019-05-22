@@ -14,7 +14,7 @@ let allowSuper = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
-const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof)$/;
+const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof|export|as|from)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
 const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
 const digest = /\d/;
@@ -36,6 +36,9 @@ const _bracketL = {type: '[', beforeExpr: true};
 const _bracketR = {type: ']'};
 const _parenL = {type: '(', beforeExpr: true};
 const _parenR = {type: ')'};
+const _export = {type: 'export'};
+const _as = {type: 'as'};
+const _from = {type: 'from'};
 const _var = {type: 'var'};
 const _let = {type: 'let'};
 const _const = {type: 'const'};
@@ -67,6 +70,7 @@ const _debugger = {type: 'debugger'};
 const _question = {type: '?', beforeExpr: true};
 const _new = {type: 'new'};
 const _slash = {binop: 10, beforeExpr: true};
+const _star = {binop: 10,};
 const _regexp = {type: 'regexp'};
 const _this = {type: 'this'};
 const _null = {type: 'null', atomValue: null};
@@ -104,11 +108,14 @@ const opTypes = {
     '&&': {binop: 2},
     '|': {binop: 3},
     '&': {binop: 5},
-    '*': {binop: 10},
+    '*': _star,
     '%': {binop: 10},
 };
 
 const keywordTypes = {
+    'export': _export,
+    'as': _as,
+    'from': _from,
     'var': _var,
     'const': _const,
     'let': _let,
@@ -248,6 +255,8 @@ function parseStatement() {
             return parseDebugger();
         case _try:
             return parseTry();
+        case _export:
+            return parseExportDeclaration();
         default:
             const expr = parseExpression();
             if (lastTokType === _name && expr.type === 'Identifier' && eat(_colon)) {
@@ -391,6 +400,68 @@ function parseFunction(node, isStatement) {
     inFunction = oldInFunc;
     const type = isStatement ? 'FunctionDeclaration' : 'FunctionExpression';
     return finishNode(node, type);
+}
+
+function parseExportDeclaration() {
+    const node = startNode();
+    next();
+    let first = true;
+    let type = 'ExportNamedDeclaration';
+    if (tokType === _braceL) {
+        node.specifiers = [];
+        node.declaration = null;
+        next();
+        while (!eat(_braceR)) {
+            if (first) {
+                first = false
+            } else {
+                expected(_comma);
+                if (eat(_braceR)) {
+                    break;
+                }
+            }
+            const n = startNode();
+            n.local = parseIdent();
+            if (tokType === _as) {
+                next();
+                n.exported = parseIdent()
+            } else {
+                n.exported = n.local;
+            }
+            node.specifiers.push(finishNode(n, 'ExportSpecifier'));
+        }
+        if (tokType === _from) {
+            next();
+            node.source = tokType === _string ? parseBasicExpression() : unexpected();
+        } else {
+            node.source = null;
+        }
+        semicolon();
+    } else if (tokType === _default) {
+        next();
+        if (tokType === _func) {
+            const _n = startNode()
+            next();
+            node.declaration = parseFunction(_n, true);
+        } else {
+            node.declaration = parseExpression(true);
+        }
+        type = 'ExportDefaultDeclaration';
+        semicolon();
+    } else if (tokType === _var || tokType === _const || tokType === _let || tokType === _func || tokType === _class) {
+        node.specifiers = [];
+        node.declaration = parseStatement();
+    } else if (tokType === _star) {
+        type = 'ExportAllDeclaration';
+        next();
+        expected(_from)
+        node.source = tokType === _string ? parseBasicExpression() : unexpected();
+        semicolon();
+    } else {
+        unexpected()
+    }
+
+    return finishNode(node, type)
 }
 
 function parseVarStatement(node) {
