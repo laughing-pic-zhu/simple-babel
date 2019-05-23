@@ -870,7 +870,7 @@ function parseExprSubscripts() {
 
 function parseMaybeAssign() {
     const left = parseExprOp(parseMaybeUnary(), -1);
-    if (tokType === _assign) {
+    if (tokType.type === 'isAssign') {
         const node = copyNodeStart(left);
         node.left = left;
         node.operator = tokVal;
@@ -1108,28 +1108,31 @@ function readOperator(op) {
                 tokenPos += 2;
                 return finishToken(_assign, '%=');
             }
+            break;
         case 42:
             if (next === 61) {
                 tokenPos += 2;
                 return finishToken(_assign, '*=');
             }
+            break;
         case 43:
             if (next === 61) {
                 tokenPos += 2;
                 return finishToken(_assign, '+=');
             }
+            break;
         case 45:
             if (next === 61) {
                 tokenPos += 2;
                 return finishToken(_assign, '-=');
             }
+            break;
         case 47:
             if (next === 61) {
                 tokenPos += 2;
                 return finishToken(_assign, '/=');
             }
-        case 61:
-            return finishToken(_eq, '=');
+            break;
     }
     for (; ;) {
         const ch = input.charAt(++tokenPos);
