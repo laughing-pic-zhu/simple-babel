@@ -50,7 +50,8 @@ const _constructor = {type: 'constructor'};
 const _super = {type: 'super'};
 const _colon = {type: ':', beforeExpr: true};
 const _func = {type: 'function'};
-const _eq = {type: 'isAssign'};
+const _eq = {type: 'isAssign', beforeExpr: true};
+const _assign = {type: 'isAssign', beforeExpr: true};
 const _return = {type: 'return'};
 const _throw = {type: 'throw'};
 const _if = {type: 'if'};
@@ -869,7 +870,7 @@ function parseExprSubscripts() {
 
 function parseMaybeAssign() {
     const left = parseExprOp(parseMaybeUnary(), -1);
-    if (tokType === _eq) {
+    if (tokType === _assign) {
         const node = copyNodeStart(left);
         node.left = left;
         node.operator = tokVal;
@@ -1099,6 +1100,37 @@ function readInt(type) {
 }
 
 function readOperator(op) {
+    const code = input.charCodeAt(tokenPos);
+    const next = input.charCodeAt(tokenPos + 1);
+    switch (code) {
+        case 37:
+            if (next === 61) {
+                tokenPos += 2;
+                return finishToken(_assign, '%=');
+            }
+        case 42:
+            if (next === 61) {
+                tokenPos += 2;
+                return finishToken(_assign, '*=');
+            }
+        case 43:
+            if (next === 61) {
+                tokenPos += 2;
+                return finishToken(_assign, '+=');
+            }
+        case 45:
+            if (next === 61) {
+                tokenPos += 2;
+                return finishToken(_assign, '-=');
+            }
+        case 47:
+            if (next === 61) {
+                tokenPos += 2;
+                return finishToken(_assign, '/=');
+            }
+        case 61:
+            return finishToken(_eq, '=');
+    }
     for (; ;) {
         const ch = input.charAt(++tokenPos);
         if (!operatorChar.test(ch) || !opTypes[op + ch]) {
@@ -1152,6 +1184,7 @@ function readToken() {
     lastEnd = tokEnd;
     tokStart = tokenPos;
     const ch = input.charAt(tokenPos);
+    const code = input.charCodeAt(tokenPos);
     if (tokenPos >= inputLen) {
         return finishToken(_eof);
     }
@@ -1164,6 +1197,10 @@ function readToken() {
     } else if (digest.test(ch)) {
         readNumber();
     } else if (puncChars.test(ch)) {
+        if (code === 46 && input.charCodeAt(tokenPos + 1) === 46 && input.charCodeAt(tokenPos + 2) === 46) {
+            tokenPos += 3;
+            return finishToken(_ellipsis);
+        }
         tokenPos++;
         finishToken(puncTypes[ch]);
     } else if (operatorChar.test(ch)) {
