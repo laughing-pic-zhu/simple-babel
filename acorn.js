@@ -83,6 +83,9 @@ const _typeof = {type: 'typeof', prefix: true, beforeExpr: true};
 const _delete = {type: 'delete', prefix: true, beforeExpr: true};
 const _instanceof = {type: 'instanceof', binop: 7, beforeExpr: true};
 const _arrow = {type: '=>', beforeExpr: true};
+const _ellipsis = {type: 'ellipsis'};
+
+
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -281,7 +284,11 @@ function parseExpression(noComma) {
         const node = copyNodeStart(expr);
         node.expression = [expr];
         while (eat(_comma)) {
+            const oldTokType = tokType;
             node.expression.push(parseMaybeAssign());
+            if (oldTokType === _ellipsis && tokType === _comma) {
+                raise(tokStart, 'Comma is not permitted after the rest element');
+            }
         }
         return finishNode(node, 'SequenceExpression');
     }
@@ -331,8 +338,13 @@ function parseBasicExpression() {
             expected(_parenR);
             if (tokType === _arrow) {
                 return parseArrowFunction(node, exprList);
-            } else if (!val) {
-                unexpected(oldLastPos);
+            } else {
+                if (!val) {
+                    unexpected(oldLastPos);
+                }
+                if (Array.isArray(val.expression) && val.expression.some(({type}) => type === 'RestElement')) {
+                    unexpected(oldLastPos);
+                }
             }
             return val;
         case _braceL:
@@ -347,6 +359,8 @@ function parseBasicExpression() {
         case _this:
             next();
             return finishNode(node, 'thisExpression');
+        case _ellipsis:
+            return parseRestElement();
         default:
             unexpected();
     }
@@ -387,15 +401,22 @@ function parseFunction(node, isStatement) {
             expected(_comma);
         }
         let n;
-        const iden = parseIdent();
-        if (tokType === _eq) {
-            n = copyNodeStart(iden);
-            n.left = iden;
-            next();
-            n.right = parseExpression();
-            finishNode(n, 'AssignmentPattern');
+        if (tokType === _ellipsis) {
+            n = parseRestElement();
+            if (tokType === _comma) {
+                raise(tokStart, 'Comma is not permitted after the rest element');
+            }
         } else {
-            n = iden;
+            const iden = parseIdent();
+            if (tokType === _eq) {
+                n = copyNodeStart(iden);
+                n.left = iden;
+                next();
+                n.right = parseExpression();
+                finishNode(n, 'AssignmentPattern');
+            } else {
+                n = iden;
+            }
         }
         node.params.push(n);
     }
@@ -519,6 +540,13 @@ function parseImportSpecifier(node) {
         }
         node.specifiers.push(finishNode(n, 'ImportSpecifier'));
     }
+}
+
+function parseRestElement() {
+    const node = startNode();
+    next();
+    node.argument = tokType === _name ? parseIdent() : unexpected();
+    return finishNode(node, 'RestElement');
 }
 
 function parseVarStatement(node) {
