@@ -980,8 +980,16 @@ function parseExprList() {
     while (!eat(_parenR)) {
         if (first) {
             first = false;
+        } else {
+            expected(_comma);
         }
-        extr.push(parseExpression());
+        let exp;
+        if (tokType === _ellipsis) {
+            exp = parseSpreadEelement();
+        } else {
+            exp = parseExprSubscripts();
+        }
+        extr.push(exp);
     }
     return extr
 }

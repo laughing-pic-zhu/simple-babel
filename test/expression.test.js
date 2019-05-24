@@ -333,6 +333,68 @@ test('test expression', () => {
         }
     );
 
+    expect(acorn.parse('x = {a,b,c:1}')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'x', end: 1},
+                            operator: '=',
+                            right:
+                                {
+                                    type: 'ObjectExpression',
+                                    start: 4,
+                                    properties:
+                                        [{
+                                            type: 'Property',
+                                            start: 5,
+                                            computed: false,
+                                            key: {type: 'Identifier', start: 5, name: 'a', end: 6},
+                                            kind: 'init',
+                                            shorthand: true,
+                                            method: false,
+                                            value: {type: 'Identifier', start: 5, name: 'a', end: 6},
+                                            end: 6
+                                        },
+                                            {
+                                                type: 'Property',
+                                                start: 7,
+                                                computed: false,
+                                                key: {type: 'Identifier', start: 7, name: 'b', end: 8},
+                                                kind: 'init',
+                                                shorthand: true,
+                                                method: false,
+                                                value: {type: 'Identifier', start: 7, name: 'b', end: 8},
+                                                end: 8
+                                            },
+                                            {
+                                                type: 'Property',
+                                                start: 9,
+                                                computed: false,
+                                                key: {type: 'Identifier', start: 9, name: 'c', end: 10},
+                                                kind: 'init',
+                                                shorthand: false,
+                                                method: false,
+                                                value: {type: 'Literal', start: 11, value: 1, raw: '1', end: 12},
+                                                end: 12
+                                            }],
+                                    end: 13
+                                },
+                            end: 13
+                        },
+                    end: 13
+                }],
+            end: 13
+        }
+    );
+
     expect(acorn.parse('delete a.b')).toEqual(
         {
             type: 'Program',
@@ -453,6 +515,52 @@ test('test expression', () => {
                     end: 16
                 }],
             end: 16
+        }
+    );
+
+    expect(acorn.parse('a()')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'CallExpression',
+                            arguments: [],
+                            callee: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            end: 3
+                        },
+                    end: 3
+                }],
+            end: 3
+        }
+    );
+
+    expect(acorn.parse('a(b,c)')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'CallExpression',
+                            arguments:
+                                [{type: 'Identifier', start: 2, name: 'b', end: 3},
+                                    {type: 'Identifier', start: 4, name: 'c', end: 5}],
+                            callee: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            end: 6
+                        },
+                    end: 6
+                }],
+            end: 6
         }
     );
 });
