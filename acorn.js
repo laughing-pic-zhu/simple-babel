@@ -554,6 +554,13 @@ function parseRestElement() {
     return finishNode(node, 'RestElement');
 }
 
+function parseSpreadEelement() {
+    const node = startNode();
+    next();
+    node.argument = parseExpression(true);
+    return finishNode(node, 'SpreadElement');
+}
+
 function parseVarStatement(node) {
     const n = parseVar(node);
     semicolon();
@@ -637,32 +644,44 @@ function parseObj() {
                 break;
             }
         }
-        const n = startNode();
-        n.shorthand = false;
-        n.computed = false;
 
-        parsePropertyName(n);
-        if ((n.key.name === 'set' || n.key.name === 'get') && tokType === _name) {
-            n.kind = n.key.name;
+        let n;
+        if (tokType === _ellipsis) {
+            n = parseSpreadEelement()
+        } else {
+            n = startNode();
+            n.computed = false;
             parsePropertyName(n);
-        } else {
-            n.kind = 'init';
-        }
-        if (tokType === _colon) {
-            n.method = false;
-            next();
-            n.value = parseExpression(true);
-        } else {
-            n.method = true;
-            n.value = parseFunction(startNode(), false);
+            if ((n.key.name === 'set' || n.key.name === 'get') && tokType === _name) {
+                n.kind = n.key.name;
+                parsePropertyName(n);
+            } else {
+                n.kind = 'init';
+            }
+            if (tokType === _colon) {
+                n.shorthand = false;
+                n.method = false;
+                next();
+                n.value = parseExpression(true);
+            } else if (tokType === _comma || tokType === _braceR) {
+                n.shorthand = true;
+                n.method = false;
+                n.value = n.key;
+            } else {
+                n.shorthand = false;
+                n.method = true;
+                n.value = parseFunction(startNode(), false);
+            }
+
+            if (n.kind === 'set' && n.value.params.length !== 1) {
+                raise(n.value.start, 'setter should have exactly one param');
+            } else if (n.kind === 'get' && n.value.params.length !== 0) {
+                raise(n.value.start, 'getter should have no params');
+            }
+            finishNode(n, 'Property')
         }
 
-        if (n.kind === 'set' && n.value.params.length !== 1) {
-            raise(n.value.start, 'setter should have exactly one param');
-        } else if (n.kind === 'get' && n.value.params.length !== 0) {
-            raise(n.value.start, 'getter should have no params');
-        }
-        node.properties.push(finishNode(n, 'Property'));
+        node.properties.push(n);
     }
     return finishNode(node, 'ObjectExpression');
 }
@@ -696,15 +715,18 @@ function parseArray() {
                 break;
             }
         }
+        let elt;
         if (tokType === _comma) {
-            node.elements.push(null)
+            elt = null;
+        } else if (tokType === _ellipsis) {
+            elt = parseSpreadEelement();
         } else {
-            node.elements.push(parseExpression(true))
+            elt = parseExpression(true);
         }
+        node.elements.push(elt)
 
     }
     return finishNode(node, 'ArrayExpression');
-
 }
 
 function parseBreak() {
