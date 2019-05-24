@@ -67,6 +67,102 @@ test('test modules export', () => {
         }
     )
 
+    expect(acorn.parse('export default function (){}')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExportDefaultDeclaration',
+                    start: 0,
+                    declaration:
+                        {
+                            type: 'FunctionDeclaration',
+                            start: 15,
+                            id: null,
+                            params: [],
+                            expression: false,
+                            generator: false,
+                            body: {type: 'BlockStatement', start: 26, body: [], end: 28},
+                            end: 28
+                        },
+                    end: 28
+                }],
+            end: 28
+        }
+    )
+
+    expect(acorn.parse('export default function a(){}')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExportDefaultDeclaration',
+                    start: 0,
+                    declaration:
+                        {
+                            type: 'FunctionDeclaration',
+                            start: 15,
+                            id: {type: 'Identifier', start: 24, name: 'a', end: 25},
+                            params: [],
+                            expression: false,
+                            generator: false,
+                            body: {type: 'BlockStatement', start: 27, body: [], end: 29},
+                            end: 29
+                        },
+                    end: 29
+                }],
+            end: 29
+        }
+    )
+
+    expect(acorn.parse('export default class A{}')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExportDefaultDeclaration',
+                    start: 0,
+                    declaration:
+                        {
+                            type: 'ClassDeclaration',
+                            start: 15,
+                            id: {type: 'Identifier', start: 21, name: 'A', end: 22},
+                            superClass: null,
+                            body: {type: 'ClassBody', start: 22, body: [], end: 24},
+                            end: 24
+                        },
+                    end: 24
+                }],
+            end: 24
+        }
+    )
+
+    expect(acorn.parse('export default class {}')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExportDefaultDeclaration',
+                    start: 0,
+                    declaration:
+                        {
+                            type: 'ClassDeclaration',
+                            start: 15,
+                            id: null,
+                            superClass: null,
+                            body: {type: 'ClassBody', start: 21, body: [], end: 23},
+                            end: 23
+                        },
+                    end: 23
+                }],
+            end: 23
+        }
+    )
+
     expect(acorn.parse('export {a}')).toEqual(
         {
             type: 'Program',

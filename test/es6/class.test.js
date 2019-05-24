@@ -18,6 +18,37 @@ test('test class function', () => {
             }
         )
 
+        expect(acorn.parse('var a=class {}')).toEqual(
+            {
+                type: 'Program',
+                start: 0,
+                body:
+                    [{
+                        type: 'VariableDeclaration',
+                        start: 0,
+                        kind: 'var',
+                        declarations:
+                            [{
+                                type: 'VariableDeclarator',
+                                start: 4,
+                                id: {type: 'Identifier', start: 4, name: 'a', end: 5},
+                                init:
+                                    {
+                                        type: 'ClassExpression',
+                                        start: 6,
+                                        id: null,
+                                        superClass: null,
+                                        body: {type: 'ClassBody', start: 12, body: [], end: 14},
+                                        end: 14
+                                    },
+                                end: 14
+                            }],
+                        end: 14
+                    }],
+                end: 14
+            }
+        )
+
         expect(acorn.parse('class A extends b.c{}')).toEqual(
             {
                 type: 'Program',

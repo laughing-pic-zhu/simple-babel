@@ -211,7 +211,7 @@ function parseStatement() {
             next();
             return parseFunction(node, true);
         case _class:
-            return parseClassDeclaration(node);
+            return parseClassDeclaration(node, true);
         case _braceL:
             return parseBlock();
         case _return:
@@ -354,6 +354,8 @@ function parseBasicExpression() {
         case _func:
             next();
             return parseFunction(node, false);
+        case _class:
+            return parseClassDeclaration(node, false);
         case _new:
             return parseNew();
         case _this:
@@ -381,10 +383,10 @@ function parseIdent(flag) {
     return finishNode(node, 'Identifier');
 }
 
-function parseFunction(node, isStatement) {
+function parseFunction(node, isStatement, limitName) {
     if (tokType === _name) {
         node.id = parseIdent();
-    } else if (!isStatement) {
+    } else if (!isStatement || limitName) {
         node.id = null;
     } else {
         unexpected();
@@ -468,7 +470,10 @@ function parseExportDeclaration() {
         if (tokType === _func) {
             const _n = startNode()
             next();
-            node.declaration = parseFunction(_n, true);
+            node.declaration = parseFunction(_n, true, true);
+        } else if (tokType === _class) {
+            const _n = startNode()
+            node.declaration = parseClassDeclaration(_n, true, true);
         } else {
             node.declaration = parseExpression(true);
         }
@@ -555,9 +560,15 @@ function parseVarStatement(node) {
     return finishNode(n, 'VariableDeclaration');
 }
 
-function parseClassDeclaration(node) {
+function parseClassDeclaration(node, isStatement, limitName) {
     next();
-    node.id = parseIdent();
+    if (tokType === _name) {
+        node.id = parseIdent();
+    } else if (!isStatement || limitName) {
+        node.id = null;
+    } else {
+        unexpected();
+    }
     node.superClass = eat(_extends) ? parseExprSubscripts() : null;
     const bodyNode = startNode();
     expected(_braceL);
@@ -579,7 +590,7 @@ function parseClassDeclaration(node) {
         bodyNode.body.push(finishNode(methodNode, 'MethodDefinition'));
     }
     node.body = finishNode(bodyNode, 'ClassBody');
-    return finishNode(node, 'ClassDeclaration')
+    return finishNode(node, isStatement ? 'ClassDeclaration' : 'ClassExpression')
 }
 
 function parseBlock(allowStrict) {
