@@ -1133,6 +1133,20 @@ function readString(quote) {
     tokenPos++;
     for (; ;) {
         const ch = input.charAt(tokenPos);
+        if (tokenPos > inputLen) {
+            raise(tokStart, 'Unterminated string constant')
+        }
+        if (ch === quote) {
+            tokenPos++;
+            finishToken(tokType, str);
+            break;
+        } else {
+            ++tokenPos;
+            str += ch;
+        }
+    }
+}
+
         if (ch === quote) {
             tokenPos++;
             finishToken(tokType, str);
@@ -1277,6 +1291,9 @@ function readToken() {
         finishToken(puncTypes[ch]);
     } else if (operatorChar.test(ch)) {
         readOperator(ch)
+    } else if (code === 96) {
+        tokenPos++;
+        finishToken(_quote);
     }
 }
 
