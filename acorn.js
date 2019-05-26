@@ -1382,7 +1382,7 @@ function readToken() {
         readOperator(ch)
     } else if (code === 96) {
         tokenPos++;
-        finishToken(_quote)
+        finishToken(_quote, undefined, true)
     }
 }
 
@@ -1433,6 +1433,7 @@ function initTokenState() {
     tokEnd = 0;
     strict = false;
     inFunction = false;
+    inTemplate = false;
     allowRegexp = true;
 }
 

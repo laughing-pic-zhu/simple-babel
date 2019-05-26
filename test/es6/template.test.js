@@ -251,4 +251,40 @@ test('test template literals', () => {
         }
     )
 
+    expect(acorn.parse('` ${test} a`')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            type: 'TemplateLiteral',
+                            start: 0,
+                            expressions: [{type: 'Identifier', start: 4, name: 'test', end: 8}],
+                            quasis:
+                                [{
+                                    type: 'TemplateElement',
+                                    start: 1,
+                                    value: {raw: ' ', cooked: ' '},
+                                    tail: false,
+                                    end: 2
+                                },
+                                    {
+                                        type: 'TemplateElement',
+                                        start: 9,
+                                        value: {raw: ' a', cooked: ' a'},
+                                        tail: true,
+                                        end: 11
+                                    }],
+                            value: '',
+                            end: 12
+                        },
+                    end: 12
+                }],
+            end: 12
+        }
+    )
 })
