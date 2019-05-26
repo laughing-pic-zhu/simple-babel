@@ -1132,30 +1132,57 @@ function readString(quote) {
     let str = '';
     tokenPos++;
     for (; ;) {
-        const ch = input.charAt(tokenPos);
-        if (tokenPos > inputLen) {
+        const code = input.charCodeAt(tokenPos);
+        if (tokenPos >= inputLen) {
             raise(tokStart, 'Unterminated string constant')
         }
-        if (ch === quote) {
+        if (code === 92) {
+            str += readEscapedChar();
+        } else if (code === quote) {
             tokenPos++;
             finishToken(tokType, str);
             break;
         } else {
             ++tokenPos;
-            str += ch;
+            str += String.fromCharCode(code);
         }
     }
 }
 
+function readEscapedChar() {
+    tokenPos++;
+    const code = input.charCodeAt(tokenPos);
+    tokenPos++;
+    switch (code) {
+        case 110:
+            return '\n';
+        case 114:
+            return '\r';
+        case 116:
+            return '\f';
+        default:
+            return String.fromCharCode(code);
+    }
+}
+
+function readTemplateString(quote) {
+    tokType = _string;
+    let str = '';
+    for (; ;) {
+        const ch = input.charAt(tokenPos);
+        if (tokenPos > inputLen) {
+            raise(tokStart, 'Unterminated template')
+        }
         if (ch === quote) {
             tokenPos++;
-            finishToken(tokType, str);
+            finishToken()
             break;
         } else {
             ++tokenPos;
             str += ch;
         }
     }
+    return str
 }
 
 function readNumber() {
@@ -1276,8 +1303,8 @@ function readToken() {
     }
     if (allowRegexp && ch === '/') {
         readRegex();
-    } else if (ch === '\'' || ch === '"') {
-        readString(ch);
+    } else if (code === 39 || code === 34) {
+        readString(code);
     } else if (indentifierReg.test(ch)) {
         readWord();
     } else if (digest.test(ch)) {
