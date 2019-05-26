@@ -11,6 +11,7 @@ let strict = false;
 let inFunction = false;
 let allowRegexp = true;
 let allowSuper = false;
+let inTemplate = false;
 const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
@@ -83,8 +84,9 @@ const _typeof = {type: 'typeof', prefix: true, beforeExpr: true};
 const _delete = {type: 'delete', prefix: true, beforeExpr: true};
 const _instanceof = {type: 'instanceof', binop: 7, beforeExpr: true};
 const _arrow = {type: '=>', beforeExpr: true};
-const _ellipsis = {type: 'ellipsis'};
-
+const _ellipsis = {type: '...'};
+const _quote = {type: '`'};
+const _dollarBrace = {type: '${'};
 
 const strictBadWords = /^(?:eval|arguments)$/;
 
@@ -363,6 +365,8 @@ function parseBasicExpression() {
             return finishNode(node, 'thisExpression');
         case _ellipsis:
             return parseRestElement();
+        case _quote:
+            return parseTemplateLiteral();
         default:
             unexpected();
     }
@@ -559,6 +563,38 @@ function parseSpreadEelement() {
     next();
     node.argument = parseExpression(true);
     return finishNode(node, 'SpreadElement');
+}
+
+function parseTemplateLiteral() {
+    const node = startNode();
+    node.expressions = [];
+    node.quasis = [];
+    node.value = '';
+    inTemplate = true;
+    next();
+    for (; ;) {
+        const n = startNode();
+        n.value = {
+            raw: input.slice(tokStart, tokEnd),
+            cooked: tokVal,
+        };
+        n.tail = false;
+        next();
+        inTemplate = false;
+        finishNode(n, 'TemplateElement');
+        node.quasis.push(n);
+        next();
+        if (tokType === _quote) {
+            n.tail = true;
+            next();
+            break;
+        }
+        inTemplate = true;
+        node.expressions.push(parseExpression());
+        expected(_braceR);
+    }
+    inTemplate = false;
+    return finishNode(node, 'TemplateLiteral')
 }
 
 function parseVarStatement(node) {
@@ -1075,7 +1111,6 @@ function canInsertSemicolon() {
 }
 
 function next() {
-    skipSpace();
     readToken();
 }
 
@@ -1165,21 +1200,44 @@ function readEscapedChar() {
     }
 }
 
-function readTemplateString(quote) {
+function getTokenTemplate() {
+    const code = input.charCodeAt(tokenPos);
+
+
+    // ${ 必须在字符串后面解析
+    if (tokType === _string) {
+        if (code === 36 && input.charCodeAt(tokenPos + 1) === 123) {
+            tokenPos += 2;
+            return finishToken(_dollarBrace);
+        }
+    } else if (code === 125) {
+        tokenPos++;
+        return finishToken(_braceR, undefined, true);
+    }
+
+
+    readTemplateString();
+}
+
+function readTemplateString() {
     tokType = _string;
     let str = '';
+
     for (; ;) {
-        const ch = input.charAt(tokenPos);
-        if (tokenPos > inputLen) {
+        const code = input.charCodeAt(tokenPos);
+        if (tokenPos >= inputLen) {
             raise(tokStart, 'Unterminated template')
         }
-        if (ch === quote) {
-            tokenPos++;
-            finishToken()
+        if (code === 92) {
+            str += readEscapedChar();
+        }
+        else if (code === 96 || code === 36 && input.charCodeAt(tokenPos + 1) === 123) {
+            finishToken(_string, str);
             break;
-        } else {
+        }
+        else {
             ++tokenPos;
-            str += ch;
+            str += String.fromCharCode(code);
         }
     }
     return str
@@ -1301,6 +1359,10 @@ function readToken() {
     if (tokenPos >= inputLen) {
         return finishToken(_eof);
     }
+
+    if (inTemplate) {
+        return getTokenTemplate();
+    }
     if (allowRegexp && ch === '/') {
         readRegex();
     } else if (code === 39 || code === 34) {
@@ -1320,16 +1382,18 @@ function readToken() {
         readOperator(ch)
     } else if (code === 96) {
         tokenPos++;
-        finishToken(_quote);
+        finishToken(_quote)
     }
 }
 
-function finishToken(type, str) {
+function finishToken(type, str, isSkip) {
     tokEnd = tokenPos;
     tokType = type;
     tokVal = str;
     allowRegexp = type.beforeExpr;
-    skipSpace();
+    if (!isSkip) {
+        skipSpace();
+    }
 }
 
 // 去除注释
