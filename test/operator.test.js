@@ -342,7 +342,6 @@ test('test atom type', () => {
         }
     )
 
-
     expect(acorn.parse('a=3')).toEqual(
         {
             type: 'Program',
@@ -363,6 +362,124 @@ test('test atom type', () => {
                     end: 3
                 }],
             end: 3
+        }
+    )
+});
+
+
+test('test assignment operator', () => {
+    expect(acorn.parse('a+=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '+=',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+
+    expect(acorn.parse('a-=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '-=',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+
+    expect(acorn.parse('a*=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '*=',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+
+    expect(acorn.parse('a/=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '/=',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+
+    expect(acorn.parse('a%=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '%=',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
         }
     )
 
@@ -388,6 +505,4 @@ test('test atom type', () => {
             end: 4
         }
     )
-});
-
-
+})

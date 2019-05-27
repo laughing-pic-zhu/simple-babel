@@ -17,7 +17,7 @@ const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
 const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof|export|as|from|import)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
-const operatorChar = /[+\-\*%\/=>\|&\!\~<>]/;
+const operatorChar = /[+\-\*%=>\|&\!\~<>]/;
 const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
 const lineBreak = /[\n\r\u2028\u2029]/g;
@@ -87,16 +87,19 @@ const _arrow = {type: '=>', beforeExpr: true};
 const _ellipsis = {type: '...'};
 const _quote = {type: '`'};
 const _dollarBrace = {type: '${'};
-
+const _modulo = {binop: 10};
+const _plus = {binop: 9, prefix: true,};
+const _min = {binop: 9, prefix: true,};
+const _incDes = {postfix: true, prefix: true, isUpdate: true};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
     '/': _slash,
     '=': _eq,
-    '+': {binop: 9, prefix: true,},
-    '-': {binop: 9, prefix: true,},
-    '++': {postfix: true, prefix: true, isUpdate: true},
-    '--': {postfix: true, prefix: true, isUpdate: true},
+    '+': _plus,
+    '-': _min,
+    '++': _incDes,
+    '--': _incDes,
     '!': {prefix: true,},
     '~': {prefix: true,},
     '===': {binop: 6},
@@ -116,7 +119,7 @@ const opTypes = {
     '|': {binop: 3},
     '&': {binop: 5},
     '*': _star,
-    '%': {binop: 10},
+    '%': _modulo,
 };
 
 const keywordTypes = {
@@ -164,7 +167,6 @@ const keywordTypes = {
 const puncTypes = {
     ';': _semi,
     ',': _comma,
-    '.': _dot,
     '{': _braceL,
     '}': _braceR,
     '[': _bracketL,
@@ -1243,11 +1245,23 @@ function readTemplateString() {
     return str
 }
 
-function readNumber() {
+function readNumber(isStartWithDot) {
+    let isFloat = false;
+    let val;
     tokType = _num;
     readInt(10);
+    if (input.charCodeAt(tokenPos) === 46) {
+        tokenPos++;
+        isFloat = true;
+        readInt(10);
+    }
     const str = input.slice(tokStart, tokenPos);
-    const val = parseInt(str, 10);
+    if (isFloat) {
+        val = parseFloat(str);
+    } else {
+        val = parseInt(str, 10);
+    }
+
     return finishToken(tokType, val);
 }
 
@@ -1268,40 +1282,6 @@ function readInt(type) {
 }
 
 function readOperator(op) {
-    const code = input.charCodeAt(tokenPos);
-    const next = input.charCodeAt(tokenPos + 1);
-    switch (code) {
-        case 37:
-            if (next === 61) {
-                tokenPos += 2;
-                return finishToken(_assign, '%=');
-            }
-            break;
-        case 42:
-            if (next === 61) {
-                tokenPos += 2;
-                return finishToken(_assign, '*=');
-            }
-            break;
-        case 43:
-            if (next === 61) {
-                tokenPos += 2;
-                return finishToken(_assign, '+=');
-            }
-            break;
-        case 45:
-            if (next === 61) {
-                tokenPos += 2;
-                return finishToken(_assign, '-=');
-            }
-            break;
-        case 47:
-            if (next === 61) {
-                tokenPos += 2;
-                return finishToken(_assign, '/=');
-            }
-            break;
-    }
     for (; ;) {
         const ch = input.charAt(++tokenPos);
         if (!operatorChar.test(ch) || !opTypes[op + ch]) {
@@ -1350,6 +1330,81 @@ function readRegex() {
     return finishToken(_regexp, new RegExp(content, word))
 }
 
+function readToken_dot() {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next >= 48 && next < 57) {
+        return readNumber(true)
+    }
+    const next1 = input.charCodeAt(tokenPos + 2);
+    if (next === 46 && next1 === 46) {
+        tokenPos += 3;
+        return finishToken(_ellipsis)
+    } else {
+        tokenPos++;
+        return finishToken(_dot);
+    }
+}
+
+function readToken_slash() {
+    if (allowRegexp) {
+        return readRegex();
+    }
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        tokenPos += 2;
+        return finishToken(_assign, '/=');
+    }
+    tokenPos++;
+    return finishToken(_slash, '/');
+}
+
+function readToken_modulo() {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        tokenPos += 2;
+        return finishToken(_assign, '%=');
+    }
+    tokenPos++;
+    return finishToken(_modulo, '%');
+}
+
+function readToken_mult() {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        tokenPos += 2;
+        return finishToken(_assign, '*=');
+    }
+    tokenPos++;
+    return finishToken(_star, '*');
+}
+
+function readToken_plus() {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        tokenPos += 2;
+        return finishToken(_assign, '+=');
+    } else if (next === 43) {
+        tokenPos += 2;
+        return finishToken(_incDes, '++');
+    }
+
+    tokenPos++;
+    return finishToken(_plus, '+');
+}
+
+function readToken_min() {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        tokenPos += 2;
+        return finishToken(_assign, '-=');
+    } else if (next === 45) {
+        tokenPos += 2;
+        return finishToken(_incDes, '--');
+    }
+    tokenPos++;
+    return finishToken(_min, '-');
+}
+
 function readToken() {
     lastStart = tokStart;
     lastEnd = tokEnd;
@@ -1363,26 +1418,52 @@ function readToken() {
     if (inTemplate) {
         return getTokenTemplate();
     }
-    if (allowRegexp && ch === '/') {
-        readRegex();
-    } else if (code === 39 || code === 34) {
-        readString(code);
-    } else if (indentifierReg.test(ch)) {
-        readWord();
-    } else if (digest.test(ch)) {
-        readNumber();
-    } else if (puncChars.test(ch)) {
-        if (code === 46 && input.charCodeAt(tokenPos + 1) === 46 && input.charCodeAt(tokenPos + 2) === 46) {
-            tokenPos += 3;
-            return finishToken(_ellipsis);
+    const token = getTokenFromCode(code);
+    if (!token) {
+        if (code === 39 || code === 34) {
+            readString(code);
+        } else if (indentifierReg.test(ch)) {
+            readWord();
+        } else if (digest.test(ch)) {
+            readNumber(false);
+        } else if (puncChars.test(ch)) {
+            tokenPos++;
+            finishToken(puncTypes[ch]);
+        } else if (operatorChar.test(ch)) {
+            readOperator(ch)
         }
-        tokenPos++;
-        finishToken(puncTypes[ch]);
-    } else if (operatorChar.test(ch)) {
-        readOperator(ch)
-    } else if (code === 96) {
-        tokenPos++;
-        finishToken(_quote, undefined, true)
+    }
+    return token
+}
+
+function getTokenFromCode(code) {
+    switch (code) {
+        case 37:
+            return readToken_modulo();
+        case 42:
+            return readToken_mult();
+        case 43:
+            return readToken_plus();
+        case 45:
+            return readToken_min();
+        case 46:
+            return readToken_dot();
+        case 47:
+            return readToken_slash();
+        case 48:
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+            return readNumber(false);
+        case 96:
+            tokenPos++;
+            return finishToken(_quote, undefined, true)
     }
 }
 
@@ -1394,6 +1475,7 @@ function finishToken(type, str, isSkip) {
     if (!isSkip) {
         skipSpace();
     }
+    return type
 }
 
 // 去除注释
