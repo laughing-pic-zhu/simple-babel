@@ -12,13 +12,11 @@ let inFunction = false;
 let allowRegexp = true;
 let allowSuper = false;
 let inTemplate = false;
-const puncChars = /[\.:,;\{\}\(\)\[\]\?]/;
 const indentifierReg = /[A-Za-z_$]/;
 const identifierG = /[A-Za-z_$0-9]+/g;
 const keywords = /^(?:var|const|let|class|constructor|extends|static|super|function|return|throw|if|else|switch|case|default|for|in|while|do|break|continue|try|catch|finally|debugger|new|this|null|true|false|delete|void|typeof|instanceof|export|as|from|import)$/;
 const strictReservedWords = /^(?:implements|interface|let|package|private|protected|public|yield)$/;
 const operatorChar = /[+\-\*%=>\|&\!\~<>]/;
-const digest = /\d/;
 const newline = /[\n\r\u2028\u2029]/;
 const lineBreak = /[\n\r\u2028\u2029]/g;
 const logicReg = /&&|\|\|/;
@@ -91,6 +89,8 @@ const _modulo = {binop: 10};
 const _plus = {binop: 9, prefix: true,};
 const _min = {binop: 9, prefix: true,};
 const _incDes = {postfix: true, prefix: true, isUpdate: true};
+const _prefix = {prefix: true,};
+const _equality = {binop: 6};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
@@ -100,7 +100,7 @@ const opTypes = {
     '-': _min,
     '++': _incDes,
     '--': _incDes,
-    '!': {prefix: true,},
+    '!': _prefix,
     '~': {prefix: true,},
     '===': {binop: 6},
     '==': {binop: 6},
@@ -163,18 +163,6 @@ const keywordTypes = {
     'typeof': _typeof,
     'delete': _delete,
     'instanceof': _instanceof,
-};
-const puncTypes = {
-    ';': _semi,
-    ',': _comma,
-    '{': _braceL,
-    '}': _braceR,
-    '[': _bracketL,
-    ']': _bracketR,
-    '(': _parenL,
-    ')': _parenR,
-    ':': _colon,
-    '?': _question,
 };
 
 function parse(inpt) {
@@ -1358,6 +1346,18 @@ function readToken_slash() {
     return finishToken(_slash, '/');
 }
 
+function readToken_eq_excl(code) {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === 61) {
+        return finishOp(_equality, input.charCodeAt(tokenPos + 2) === 61 ? 3 : 2);
+    }
+    if (code === 61 && next === 62) {
+        return finishOp(_arrow, 2);
+    }
+
+    return finishOp(code === 61 ? _eq : _prefix, 1);
+}
+
 function readToken_modulo() {
     const next = input.charCodeAt(tokenPos + 1);
     if (next === 61) {
@@ -1420,15 +1420,8 @@ function readToken() {
     }
     const token = getTokenFromCode(code);
     if (!token) {
-        if (code === 39 || code === 34) {
-            readString(code);
-        } else if (indentifierReg.test(ch)) {
+        if (indentifierReg.test(ch) || code === 92) {
             readWord();
-        } else if (digest.test(ch)) {
-            readNumber(false);
-        } else if (puncChars.test(ch)) {
-            tokenPos++;
-            finishToken(puncTypes[ch]);
         } else if (operatorChar.test(ch)) {
             readOperator(ch)
         }
@@ -1438,6 +1431,19 @@ function readToken() {
 
 function getTokenFromCode(code) {
     switch (code) {
+        case 34:
+        case 39:
+            return readString(code);
+        case 46:
+            return readToken_dot();
+
+        // cal operator
+        case 33:
+        case 61: //!=
+            return readToken_eq_excl(code);
+        case 126: //~
+            return finishOp(_prefix, 1);
+        // assign operator
         case 37:
             return readToken_modulo();
         case 42:
@@ -1446,8 +1452,6 @@ function getTokenFromCode(code) {
             return readToken_plus();
         case 45:
             return readToken_min();
-        case 46:
-            return readToken_dot();
         case 47:
             return readToken_slash();
         case 48:
@@ -1461,9 +1465,41 @@ function getTokenFromCode(code) {
         case 56:
         case 57:
             return readNumber(false);
+
+        //punctuation
+        case 44:
+            tokenPos++;
+            return finishToken(_comma);
+        case 58:
+            tokenPos++;
+            return finishToken(_colon);
+        case 59:
+            tokenPos++;
+            return finishToken(_semi);
         case 96:
             tokenPos++;
-            return finishToken(_quote, undefined, true)
+            return finishToken(_quote, undefined, true);
+        case 123:
+            tokenPos++;
+            return finishToken(_braceL);
+        case 125:
+            tokenPos++;
+            return finishToken(_braceR);
+        case 40:
+            tokenPos++;
+            return finishToken(_parenL);
+        case 41:
+            tokenPos++;
+            return finishToken(_parenR);
+        case 91:
+            tokenPos++;
+            return finishToken(_bracketL);
+        case 93:
+            tokenPos++;
+            return finishToken(_bracketR);
+        case 63:
+            tokenPos++;
+            return finishToken(_question);
     }
 }
 
@@ -1519,6 +1555,12 @@ function initTokenState() {
     allowRegexp = true;
 }
 
+function finishOp(type, size) {
+    const val = input.slice(tokenPos, tokenPos + size);
+    tokenPos += size;
+    return finishToken(type, val)
+}
+
 function getLineInfo(input, offset) {
     let line = 1;
     let column = 0;
@@ -1538,7 +1580,6 @@ function getLineInfo(input, offset) {
         line,
         column
     }
-
 }
 
 function expected(type) {
