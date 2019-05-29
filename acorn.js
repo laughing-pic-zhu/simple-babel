@@ -91,35 +91,27 @@ const _min = {binop: 9, prefix: true,};
 const _incDes = {postfix: true, prefix: true, isUpdate: true};
 const _prefix = {prefix: true,};
 const _equality = {binop: 6};
+const _bitWiseOR = {binop: 3};
+const _bitWiseAND = {binop: 5};
+const _logicalOR = {binop: 1};
+const _logicalAND = {binop: 2};
+const _relational = {binop: 7};
+const _bitShift = {binop: 8};
 const strictBadWords = /^(?:eval|arguments)$/;
 
 const opTypes = {
-    '/': _slash,
-    '=': _eq,
-    '+': _plus,
-    '-': _min,
-    '++': _incDes,
-    '--': _incDes,
-    '!': _prefix,
-    '~': {prefix: true,},
-    '===': {binop: 6},
-    '==': {binop: 6},
-    '!==': {binop: 6},
-    '!=': {binop: 6},
-    '>': {binop: 7},
-    '>=': {binop: 7},
-    '>>': {binop: 8},
-    '>>>': {binop: 8},
-    '<': {binop: 7},
-    '<=': {binop: 7},
-    '<<': {binop: 8},
-    '<<<': {binop: 8},
-    '||': {binop: 1},
-    '&&': {binop: 2},
-    '|': {binop: 3},
-    '&': {binop: 5},
-    '*': _star,
-    '%': _modulo,
+    '>': _relational,
+    '>=': _relational,
+    '>>': _bitShift,
+    '>>>': _bitShift,
+    '<': _relational,
+    '<=': _relational,
+    '<<': _bitShift,
+    '<<<': _bitShift,
+    '||': _logicalOR,
+    '&&': _logicalAND,
+    '|': _bitWiseOR,
+    '&': _bitWiseAND,
 };
 
 const keywordTypes = {
@@ -1269,23 +1261,6 @@ function readInt(type) {
     return total
 }
 
-function readOperator(op) {
-    for (; ;) {
-        const ch = input.charAt(++tokenPos);
-        if (!operatorChar.test(ch) || !opTypes[op + ch]) {
-            break;
-        } else {
-            op = op + ch;
-        }
-    }
-    let type = opTypes[op];
-    if (op === '=' && input.charAt(tokenPos) === '>') {
-        tokenPos++;
-        type = _arrow;
-    }
-    return finishToken(type, op);
-}
-
 function readRegex() {
     tokenPos++;
     let content = '', escaped = false, inClass = false, start = tokenPos;
@@ -1405,6 +1380,30 @@ function readToken_min() {
     return finishToken(_min, '-');
 }
 
+function readToken_pipe_amp(code) {
+    const next = input.charCodeAt(tokenPos + 1);
+    if (next === code) {
+        return finishOp(code === 124 ? _logicalOR : _logicalAND, 2)
+    } else if (next === 61) {
+        return finishOp(_assign, 2)
+    }
+    return finishOp(code === 124 ? _bitWiseOR : _bitWiseAND, 1);
+}
+
+function readToken_relation_bit(code) {
+    const next = input.charCodeAt(tokenPos + 1);
+    var size = 1;
+    if (next === code) {
+        size = code === 62 && input.charCodeAt(tokenPos + 2) === 62 ? 3 : 2;
+        if (input.charCodeAt(tokenPos + size) === 61) {
+            return finishOp(_assign, size + 1)
+        }
+        return finishOp(_bitShift, size);
+    }
+    size = next === 61 ? 2 : 1;
+    return finishOp(_relational, size)
+}
+
 function readToken() {
     lastStart = tokStart;
     lastEnd = tokEnd;
@@ -1422,8 +1421,6 @@ function readToken() {
     if (!token) {
         if (indentifierReg.test(ch) || code === 92) {
             readWord();
-        } else if (operatorChar.test(ch)) {
-            readOperator(ch)
         }
     }
     return token
@@ -1443,9 +1440,15 @@ function getTokenFromCode(code) {
             return readToken_eq_excl(code);
         case 126: //~
             return finishOp(_prefix, 1);
+        case 60:
+        case 62:
+            return readToken_relation_bit(code);
         // assign operator
         case 37:
             return readToken_modulo();
+        case 38:
+        case 124:
+            return readToken_pipe_amp(code);
         case 42:
             return readToken_mult();
         case 43:

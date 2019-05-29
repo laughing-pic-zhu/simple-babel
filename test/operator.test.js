@@ -1,6 +1,6 @@
 const acorn = require('../acorn');
 
-test('test atom type', () => {
+test('test logical operator', () => {
     expect(acorn.parse('+a')).toEqual(
         {
             type: 'Program',
@@ -483,7 +483,7 @@ test('test assignment operator', () => {
         }
     )
 
-    expect(acorn.parse('a+=3')).toEqual(
+    expect(acorn.parse('a>>>=y')).toEqual(
         {
             type: 'Program',
             start: 0,
@@ -496,7 +496,102 @@ test('test assignment operator', () => {
                             start: 0,
                             type: 'AssignmentExpression',
                             left: {type: 'Identifier', start: 0, name: 'a', end: 1},
-                            operator: '+=',
+                            operator: '>>>=',
+                            right: {type: 'Identifier', start: 5, name: 'y', end: 6},
+                            end: 6
+                        },
+                    end: 6
+                }],
+            end: 6
+        }
+    )
+
+    expect(acorn.parse('a>>=y')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '>>=',
+                            right: {type: 'Identifier', start: 4, name: 'y', end: 5},
+                            end: 5
+                        },
+                    end: 5
+                }],
+            end: 5
+        }
+    )
+
+    expect(acorn.parse('a<<=y')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'AssignmentExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '<<=',
+                            right: {type: 'Identifier', start: 4, name: 'y', end: 5},
+                            end: 5
+                        },
+                    end: 5
+                }],
+            end: 5
+        }
+    )
+})
+
+
+test('test relational operator', () => {
+    expect(acorn.parse('a<b')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '<',
+                            right: {type: 'Identifier', start: 2, name: 'b', end: 3},
+                            end: 3
+                        },
+                    end: 3
+                }],
+            end: 3
+        }
+    )
+
+    expect(acorn.parse('a>=3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '>=',
                             right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
                             end: 4
                         },
@@ -505,4 +600,123 @@ test('test assignment operator', () => {
             end: 4
         }
     )
+
 })
+
+
+test('test bit operator', () => {
+    expect(acorn.parse('a&b')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '&',
+                            right: {type: 'Identifier', start: 2, name: 'b', end: 3},
+                            end: 3
+                        },
+                    end: 3
+                }],
+            end: 3
+        }
+    )
+
+    expect(acorn.parse('a|3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '|',
+                            right: {type: 'Literal', start: 2, value: 3, raw: '3', end: 3},
+                            end: 3
+                        },
+                    end: 3
+                }],
+            end: 3
+        }
+    )
+    expect(acorn.parse('a>>>3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '>>>',
+                            right: {type: 'Literal', start: 4, value: 3, raw: '3', end: 5},
+                            end: 5
+                        },
+                    end: 5
+                }],
+            end: 5
+        }
+    )
+
+    expect(acorn.parse('a>>3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '>>',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+    expect(acorn.parse('a<<3')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            start: 0,
+                            type: 'BinaryExpression',
+                            left: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            operator: '<<',
+                            right: {type: 'Literal', start: 3, value: 3, raw: '3', end: 4},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    )
+
+})
+
