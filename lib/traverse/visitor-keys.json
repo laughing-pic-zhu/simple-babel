@@ -1,0 +1,32 @@
+{
+  "BinaryExpression": [
+    "left",
+    "right"
+  ],
+  "MemberExpression": [
+    "object",
+    "property"
+  ],
+  "CallExpression": [
+    "callee",
+    "arguments"
+  ],
+  "UpdateExpression": [
+    "arguments"
+  ],
+  "UnaryExpression": [
+    "arguments"
+  ],
+  "VariableDeclarator": [
+    "id",
+    "init"
+  ],
+  "ExpressionStatement": [
+    "expression"
+  ],
+  "IfStatement": [
+    "test",
+    "consequent",
+    "alternate"
+  ]
+}
