@@ -1,4 +1,4 @@
-const acorn = require('../../lib/acorn');
+const acorn = require('../../../lib/acorn');
 
 test('test default params', () => {
     expect(acorn.parse('function a(b=3){}')).toEqual(

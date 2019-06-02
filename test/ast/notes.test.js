@@ -1,4 +1,4 @@
-const acorn = require('../lib/acorn');
+const acorn = require('../../lib/acorn');
 
 test('test notes', () => {
     expect(acorn.parse('//')).toEqual(

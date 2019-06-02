@@ -1,4 +1,4 @@
-const acorn = require('../../lib/acorn');
+const acorn = require('../../../lib/acorn');
 
 test('test arrow function', () => {
         expect(acorn.parse('(a,b,c)=>b')).toEqual(
