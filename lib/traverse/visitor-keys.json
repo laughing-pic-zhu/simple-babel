@@ -21,6 +21,9 @@
     "id",
     "init"
   ],
+  "VariableDeclaration": [
+    "declarations"
+  ],
   "ExpressionStatement": [
     "expression"
   ],
