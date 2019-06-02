@@ -1,4 +1,4 @@
-const acorn = require('../../acorn');
+const acorn = require('../../lib/acorn');
 
 test('test template literals', () => {
     expect(acorn.parse('const a=`abc`')).toEqual(

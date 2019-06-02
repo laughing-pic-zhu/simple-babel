@@ -1,4 +1,4 @@
-const acorn = require('../acorn');
+const acorn = require('../lib/acorn');
 
 test('test atom type', () => {
     expect(acorn.parse('null\n')).toEqual(

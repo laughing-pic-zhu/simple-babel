@@ -1,4 +1,4 @@
-const acorn = require('../acorn');
+const acorn = require('../lib/acorn');
 
 test('test logical operator', () => {
     expect(acorn.parse('+a')).toEqual(

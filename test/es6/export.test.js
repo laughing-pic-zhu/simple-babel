@@ -1,4 +1,4 @@
-const acorn = require('../../acorn');
+const acorn = require('../../lib/acorn');
 
 test('test modules export', () => {
     expect(acorn.parse('export const a=3;')).toEqual({

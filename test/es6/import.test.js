@@ -1,4 +1,4 @@
-const acorn = require('../../acorn');
+const acorn = require('../../lib/acorn');
 
 test('test modules import', () => {
     expect(acorn.parse('import a from "b";')).toEqual(

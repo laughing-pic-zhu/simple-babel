@@ -1,4 +1,4 @@
-const acorn = require('../acorn');
+const acorn = require('../lib/acorn');
 
 test('test number type', () => {
     expect(acorn.parse('123\n')).toEqual(
