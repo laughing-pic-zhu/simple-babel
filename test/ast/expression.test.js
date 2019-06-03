@@ -32,7 +32,7 @@ test('test expression', () => {
                 [{
                     type: 'ExpressionStatement',
                     start: 0,
-                    expression: {type: 'thisExpression', start: 0, end: 4},
+                    expression: {type: 'ThisExpression', start: 0, end: 4},
                     end: 4
                 }],
             end: 5

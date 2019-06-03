@@ -1,2 +1,2 @@
 const acorn = require('./lib/acorn');
-console.dir(acorn.parse('\\3'), {depth: 20});
+console.dir(acorn.parse('FUNCTION.bind(this)'), {depth: 20});

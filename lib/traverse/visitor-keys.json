@@ -11,6 +11,10 @@
     "callee",
     "arguments"
   ],
+  "FunctionExpression": [
+    "params",
+    "body"
+  ],
   "UpdateExpression": [
     "arguments"
   ],
@@ -31,5 +35,8 @@
     "test",
     "consequent",
     "alternate"
+  ],
+  "BlockStatement": [
+    "body"
   ]
 }

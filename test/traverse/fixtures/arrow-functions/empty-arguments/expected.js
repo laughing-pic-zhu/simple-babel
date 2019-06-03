@@ -1,3 +1,3 @@
-const a = function ()({
-    3;
-})
+var a = function () {
+    return 5;
+};

@@ -1,3 +1,3 @@
-var a = function () {
-    return 5;
-};
+arr.map(function (a) {
+    return a + 5;
+});
