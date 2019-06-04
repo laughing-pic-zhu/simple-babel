@@ -41,5 +41,8 @@
   ],
   "BlockStatement": [
     "body"
+  ],
+  "ReturnStatement": [
+    "argument"
   ]
 }
