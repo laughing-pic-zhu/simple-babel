@@ -1,4 +1,7 @@
 {
+  "Program": [
+    "body"
+  ],
   "BinaryExpression": [
     "left",
     "right"
