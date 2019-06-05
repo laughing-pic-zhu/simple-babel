@@ -18,6 +18,10 @@
     "params",
     "body"
   ],
+  "FunctionDeclaration": [
+    "params",
+    "body"
+  ],
   "UpdateExpression": [
     "arguments"
   ],
@@ -44,5 +48,11 @@
   ],
   "ReturnStatement": [
     "argument"
+  ],
+  "ForStatement": [
+    "body"
+  ],
+  "ForInStatement": [
+    "body"
   ]
 }
