@@ -3,8 +3,9 @@
 simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 
 
-目前支持严格模式'use strict',支持大部分词法。
+目前支持支持语法解析,语法转换以及代码生成
 
+## 语法解析
 ### Statement
 
 - [x] VariableDeclaration
@@ -51,7 +52,11 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 - [x] Identifier
 - [x] AssignmentPattern
 
+## 语法转换以及代码生成
 
+- [x] arrowFunctionExpression
+- [x] block-bind
+- 
 ## How to test
  
 ```bash
