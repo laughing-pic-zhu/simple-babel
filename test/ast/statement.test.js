@@ -137,7 +137,7 @@ test('test statement', () => {
                                 [{
                                     type: 'ReturnStatement',
                                     start: 14,
-                                    arguments: {type: 'Literal', start: 21, value: 1, raw: '1', end: 22},
+                                    argument: {type: 'Literal', start: 21, value: 1, raw: '1', end: 22},
                                     end: 23
                                 }],
                             end: 25
