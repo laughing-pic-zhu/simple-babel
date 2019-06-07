@@ -16,11 +16,13 @@
   ],
   "FunctionExpression": [
     "params",
-    "body"
+    "body",
+    "id"
   ],
   "FunctionDeclaration": [
     "params",
-    "body"
+    "body",
+    "id"
   ],
   "UpdateExpression": [
     "arguments"
@@ -54,5 +56,9 @@
   ],
   "ForInStatement": [
     "body"
+  ],
+  "AssignmentExpression": [
+    "left",
+    "right"
   ]
 }
