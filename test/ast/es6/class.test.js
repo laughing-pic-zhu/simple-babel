@@ -322,5 +322,139 @@ test('test class function', () => {
                 end: 53
             }
         )
+
+        expect(acorn.parse('class A extends B{set x(x){this.x=x} get x(){return this.x}}')).toEqual(
+            {
+                type: 'Program',
+                start: 0,
+                body:
+                    [{
+                        type: 'ClassDeclaration',
+                        start: 0,
+                        id: {type: 'Identifier', start: 6, name: 'A', end: 7},
+                        superClass: {type: 'Identifier', start: 16, name: 'B', end: 17},
+                        body:
+                            {
+                                type: 'ClassBody',
+                                start: 17,
+                                body:
+                                    [{
+                                        type: 'MethodDefinition',
+                                        start: 18,
+                                        static: false,
+                                        kind: 'set',
+                                        key: {type: 'Identifier', start: 22, name: 'x', end: 23},
+                                        computed: false,
+                                        value:
+                                            {
+                                                type: 'FunctionExpression',
+                                                start: 23,
+                                                id: null,
+                                                params: [{type: 'Identifier', start: 24, name: 'x', end: 25}],
+                                                expression: false,
+                                                generator: false,
+                                                body:
+                                                    {
+                                                        type: 'BlockStatement',
+                                                        start: 26,
+                                                        body:
+                                                            [{
+                                                                type: 'ExpressionStatement',
+                                                                start: 27,
+                                                                expression:
+                                                                    {
+                                                                        type: 'AssignmentExpression',
+                                                                        start: 27,
+                                                                        left:
+                                                                            {
+                                                                                type: 'MemberExpression',
+                                                                                start: 27,
+                                                                                object: {
+                                                                                    type: 'ThisExpression',
+                                                                                    start: 27,
+                                                                                    end: 31
+                                                                                },
+                                                                                property: {
+                                                                                    type: 'Identifier',
+                                                                                    start: 32,
+                                                                                    name: 'x',
+                                                                                    end: 33
+                                                                                },
+                                                                                computed: false,
+                                                                                end: 33
+                                                                            },
+                                                                        operator: '=',
+                                                                        right: {
+                                                                            type: 'Identifier',
+                                                                            start: 34,
+                                                                            name: 'x',
+                                                                            end: 35
+                                                                        },
+                                                                        end: 35
+                                                                    },
+                                                                end: 35
+                                                            }],
+                                                        end: 36
+                                                    },
+                                                end: 36
+                                            },
+                                        end: 36
+                                    },
+                                        {
+                                            type: 'MethodDefinition',
+                                            start: 37,
+                                            static: false,
+                                            kind: 'get',
+                                            key: {type: 'Identifier', start: 41, name: 'x', end: 42},
+                                            computed: false,
+                                            value:
+                                                {
+                                                    type: 'FunctionExpression',
+                                                    start: 42,
+                                                    id: null,
+                                                    params: [],
+                                                    expression: false,
+                                                    generator: false,
+                                                    body:
+                                                        {
+                                                            type: 'BlockStatement',
+                                                            start: 44,
+                                                            body:
+                                                                [{
+                                                                    type: 'ReturnStatement',
+                                                                    start: 45,
+                                                                    argument:
+                                                                        {
+                                                                            type: 'MemberExpression',
+                                                                            start: 52,
+                                                                            object: {
+                                                                                type: 'ThisExpression',
+                                                                                start: 52,
+                                                                                end: 56
+                                                                            },
+                                                                            property: {
+                                                                                type: 'Identifier',
+                                                                                start: 57,
+                                                                                name: 'x',
+                                                                                end: 58
+                                                                            },
+                                                                            computed: false,
+                                                                            end: 58
+                                                                        },
+                                                                    end: 58
+                                                                }],
+                                                            end: 59
+                                                        },
+                                                    end: 59
+                                                },
+                                            end: 59
+                                        }],
+                                end: 60
+                            },
+                        end: 60
+                    }],
+                end: 60
+            }
+        )
     }
 )
