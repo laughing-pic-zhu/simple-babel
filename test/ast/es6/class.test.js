@@ -242,5 +242,85 @@ test('test class function', () => {
                 end: 68
             }
         )
+
+        expect(acorn.parse('class A extends B{\n\tconstructor(){\n\t\tx.super()\n\t}\n\t\n}')).toEqual(
+            {
+                type: 'Program',
+                start: 0,
+                body:
+                    [{
+                        type: 'ClassDeclaration',
+                        start: 0,
+                        id: {type: 'Identifier', start: 6, name: 'A', end: 7},
+                        superClass: {type: 'Identifier', start: 16, name: 'B', end: 17},
+                        body:
+                            {
+                                type: 'ClassBody',
+                                start: 17,
+                                body:
+                                    [{
+                                        type: 'MethodDefinition',
+                                        start: 20,
+                                        kind: 'constructor',
+                                        computed: false,
+                                        static: false,
+                                        key: {type: 'Identifier', start: 20, name: 'constructor', end: 31},
+                                        value:
+                                            {
+                                                type: 'FunctionExpression',
+                                                start: 31,
+                                                id: null,
+                                                params: [],
+                                                expression: false,
+                                                generator: false,
+                                                body:
+                                                    {
+                                                        type: 'BlockStatement',
+                                                        start: 33,
+                                                        body:
+                                                            [{
+                                                                type: 'ExpressionStatement',
+                                                                start: 37,
+                                                                expression:
+                                                                    {
+                                                                        type: 'CallExpression',
+                                                                        start: 37,
+                                                                        arguments: [],
+                                                                        callee:
+                                                                            {
+                                                                                type: 'MemberExpression',
+                                                                                start: 37,
+                                                                                object: {
+                                                                                    type: 'Identifier',
+                                                                                    start: 37,
+                                                                                    name: 'x',
+                                                                                    end: 38
+                                                                                },
+                                                                                property: {
+                                                                                    type: 'Identifier',
+                                                                                    start: 39,
+                                                                                    name: 'super',
+                                                                                    end: 44
+                                                                                },
+                                                                                computed: false,
+                                                                                end: 44
+                                                                            },
+                                                                        end: 46
+                                                                    },
+                                                                end: 46
+                                                            }],
+                                                        end: 49
+                                                    },
+                                                end: 49
+                                            },
+                                        end: 49
+                                    }],
+                                end: 53
+                            },
+                        end: 53
+                    }],
+                end: 53
+            }
+        )
     }
 )
