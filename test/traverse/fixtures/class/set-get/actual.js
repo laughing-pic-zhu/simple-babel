@@ -1,0 +1,1 @@
+class A extends B{set x(x){this.x=x} get x(){return this.x}set y(x){}constructor(){super()}}

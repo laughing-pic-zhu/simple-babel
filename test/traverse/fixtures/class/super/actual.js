@@ -1,0 +1,1 @@
+class A extends B{constructor(){super();x.super();super.xxx;super.ccc();this.a=1}}

@@ -60,5 +60,12 @@
   "AssignmentExpression": [
     "left",
     "right"
+  ],
+  "ObjectExpression": [
+    "properties"
+  ],
+  "Property": [
+    "key",
+    "value"
   ]
 }

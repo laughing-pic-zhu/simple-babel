@@ -1,0 +1,1 @@
+class A{constructor(){this.a=1;this.xxx=function(){}}xxx(){}}
