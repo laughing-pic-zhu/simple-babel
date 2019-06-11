@@ -456,5 +456,68 @@ test('test class function', () => {
                 end: 60
             }
         )
+
+        expect(acorn.parse('class A extends B{x(){};;static y(){}}')).toEqual(
+            {
+                type: 'Program',
+                start: 0,
+                body:
+                    [{
+                        type: 'ClassDeclaration',
+                        start: 0,
+                        id: {type: 'Identifier', start: 6, name: 'A', end: 7},
+                        superClass: {type: 'Identifier', start: 16, name: 'B', end: 17},
+                        body:
+                            {
+                                type: 'ClassBody',
+                                start: 17,
+                                body:
+                                    [{
+                                        type: 'MethodDefinition',
+                                        start: 18,
+                                        static: false,
+                                        kind: 'method',
+                                        key: {type: 'Identifier', start: 18, name: 'x', end: 19},
+                                        computed: false,
+                                        value:
+                                            {
+                                                type: 'FunctionExpression',
+                                                start: 19,
+                                                id: null,
+                                                params: [],
+                                                expression: false,
+                                                generator: false,
+                                                body: {type: 'BlockStatement', start: 21, body: [], end: 23},
+                                                end: 23
+                                            },
+                                        end: 23
+                                    },
+                                        {
+                                            type: 'MethodDefinition',
+                                            start: 25,
+                                            static: true,
+                                            kind: 'method',
+                                            key: {type: 'Identifier', start: 32, name: 'y', end: 33},
+                                            computed: false,
+                                            value:
+                                                {
+                                                    type: 'FunctionExpression',
+                                                    start: 33,
+                                                    id: null,
+                                                    params: [],
+                                                    expression: false,
+                                                    generator: false,
+                                                    body: {type: 'BlockStatement', start: 35, body: [], end: 37},
+                                                    end: 37
+                                                },
+                                            end: 37
+                                        }],
+                                end: 38
+                            },
+                        end: 38
+                    }],
+                end: 38
+            }
+        )
     }
 )
