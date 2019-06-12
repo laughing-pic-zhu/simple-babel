@@ -1,0 +1,1 @@
+function a(m=4){var b=3;3*4}
