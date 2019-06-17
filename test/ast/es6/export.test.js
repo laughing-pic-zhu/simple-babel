@@ -9,6 +9,7 @@ test('test modules export', () => {
                 type: 'ExportNamedDeclaration',
                 start: 0,
                 specifiers: [],
+                source: null,
                 declaration:
                     {
                         type: 'VariableDeclaration',

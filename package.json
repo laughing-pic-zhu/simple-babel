@@ -5,7 +5,8 @@
   "main": "acorn.js",
   "dependencies": {
     "escodegen": "^1.11.1",
-    "immutable": "^4.0.0-rc.12"
+    "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "jest": "^24.7.1"
