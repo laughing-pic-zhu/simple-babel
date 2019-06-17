@@ -563,4 +563,26 @@ test('test expression', () => {
             end: 6
         }
     );
+
+    expect(acorn.parse('a[b]')).toEqual(
+        {
+            type: 'Program',
+            start: 0,
+            body:
+                [{
+                    type: 'ExpressionStatement',
+                    start: 0,
+                    expression:
+                        {
+                            type: 'MemberExpression',
+                            start: 0,
+                            object: {type: 'Identifier', start: 0, name: 'a', end: 1},
+                            property: {type: 'Identifier', start: 2, name: 'b', end: 3},
+                            end: 4
+                        },
+                    end: 4
+                }],
+            end: 4
+        }
+    );
 });
