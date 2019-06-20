@@ -1,0 +1,1 @@
+var obj={set x(x){},xxx(){},yyy(y){y}}
