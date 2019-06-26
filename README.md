@@ -56,7 +56,12 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 
 - [x] arrowFunctionExpression
 - [x] block-bind
-- 
+- [x] class
+- [x] default-parameters
+- [x] modules
+- [x] property-method
+- [x] spread
+
 ## How to test
  
 ```bash
