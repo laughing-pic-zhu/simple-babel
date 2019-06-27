@@ -61,6 +61,7 @@ simple babel。旨在深入理解babel的词法分析，替换等核心功能。
 - [x] modules
 - [x] property-method
 - [x] spread
+- [x] templateLiteral
 
 ## How to test
  

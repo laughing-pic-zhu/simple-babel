@@ -1,1 +1,1 @@
-var a = [b].concat(c, d, [e]);
+var a = '' + b;
