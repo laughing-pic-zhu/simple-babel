@@ -578,7 +578,9 @@ test('test expression', () => {
                             start: 0,
                             object: {type: 'Identifier', start: 0, name: 'a', end: 1},
                             property: {type: 'Identifier', start: 2, name: 'b', end: 3},
-                            end: 4
+                            end: 4,
+                            computed: true,
+
                         },
                     end: 4
                 }],

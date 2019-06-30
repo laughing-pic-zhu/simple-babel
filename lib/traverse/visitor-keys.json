@@ -25,10 +25,10 @@
     "id"
   ],
   "UpdateExpression": [
-    "arguments"
+    "argument"
   ],
   "UnaryExpression": [
-    "arguments"
+    "argument"
   ],
   "VariableDeclarator": [
     "id",
@@ -52,10 +52,19 @@
     "argument"
   ],
   "ForStatement": [
+    "init",
+    "test",
     "body"
   ],
   "ForInStatement": [
-    "body"
+    "body",
+    "left",
+    "right"
+  ],
+  "ForOfStatement": [
+    "body",
+    "left",
+    "right"
   ],
   "AssignmentExpression": [
     "left",
