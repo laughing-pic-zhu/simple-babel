@@ -4,9 +4,11 @@
   "description": "simple babel。旨在深入理解babel的词法/语法分析，代码转换生成等核心功能。",
   "main": "acorn.js",
   "dependencies": {
+    "commander": "^2.20.0",
     "escodegen": "^1.11.1",
     "immutable": "^4.0.0-rc.12",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "jest": "^24.7.1"

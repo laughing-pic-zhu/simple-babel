@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+
+const commander = require("commander");
+const mkdirp = require("mkdirp");
+const path = require("path");
+const fs = require("fs");
+const _ = require("lodash");
+const pkg = require("../package.json");
+const readdir = require('fs-readdir-recursive')
+const transform = require('../lib/transform');
+
+commander.option("-o, --out-file [out]", "Compile all input files into a single file");
+commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
+commander.version(pkg.version);
+commander.usage("[options] <files ...>");
+commander.parse(process.argv);
+
+const errors = [];
+const files = commander.args;
+
+files.forEach(file => {
+    if (!fs.existsSync(file)) {
+        errors.push(file + 'is not exist');
+    }
+});
+
+if (commander.outFile && commander.outDir) {
+    errors.push('cannot have outFile and outDir');
+}
+
+if (errors.length) {
+    console.error(errors.join('. '));
+    process.exit(2);
+}
+
+if (commander.outDir) {
+    const dest = commander.outDir;
+    const write = (src, relative) => {
+        const data = fs.readFileSync(src);
+        const d = transform(data);
+        const destPath = path.join(dest, relative);
+        var up = path.normalize(destPath + "/..");
+        mkdirp.sync(up);
+        fs.writeFileSync(destPath, d);
+        console.log(src + '->' + destPath);
+    };
+    const _files = files;
+    files.forEach(file => {
+        const stat = fs.statSync(file);
+        if (stat.isDirectory(file)) {
+            const paths = readdir(file);
+            paths.forEach(p => {
+                _files.push(p);
+                const x = path.join(file, p);
+                write(x, p);
+            })
+        }
+    })
+} else {
+    const datas = [];
+    files.forEach(file => {
+        const stat = fs.statSync(file);
+        if (stat.isDirectory(file)) {
+            const paths = readdir(file);
+            paths.forEach(p => {
+                const x = path.join(file, p);
+                const data = fs.readFileSync(x);
+                datas.push(transform(data));
+            })
+        }
+    })
+    const str = datas.join('\n');
+    if (commander.outFile) {
+        fs.writeFileSync(commander.outFile, str);
+    }else{
+        console.log(str)
+    }
+}
