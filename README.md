@@ -73,3 +73,23 @@ npm install
 ```bash
 npm run test
 ```
+
+## Usage
+
+### CLI
+
+Compile the file `a.js` and output it to stdout
+
+$ ./bin/babel ./example/a.js
+
+Compile the file `a.js` and output it to `a.compiled.js`
+
+$ ./bin/babel ./example/a.js -o ./example/a.compiled.js
+
+Compile the file and output it to dist directory
+
+$ ./bin/babel ./example/a.js -d dist
+
+Compile the directory and output it to dist directory
+
+$ ./bin/babel ./example -d dist

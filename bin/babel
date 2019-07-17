@@ -49,11 +49,16 @@ if (commander.outDir) {
         const stat = fs.statSync(file);
         if (stat.isDirectory(file)) {
             const paths = readdir(file);
+            console.log(paths)
             paths.forEach(p => {
                 _files.push(p);
                 const x = path.join(file, p);
                 write(x, p);
             })
+        } else {
+            const {base} = path.parse(file);
+            console.log(base)
+            write(file,base );
         }
     })
 } else {
@@ -67,12 +72,15 @@ if (commander.outDir) {
                 const data = fs.readFileSync(x);
                 datas.push(transform(data));
             })
+        } else {
+            const data = fs.readFileSync(file, 'utf-8');
+            datas.push(transform(data));
         }
-    })
+    });
     const str = datas.join('\n');
     if (commander.outFile) {
         fs.writeFileSync(commander.outFile, str);
-    }else{
+    } else {
         console.log(str)
     }
 }
