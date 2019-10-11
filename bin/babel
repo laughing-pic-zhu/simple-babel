@@ -57,7 +57,6 @@ if (commander.outDir) {
             })
         } else {
             const {base} = path.parse(file);
-            console.log(base)
             write(file,base );
         }
     })

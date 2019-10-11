@@ -5,11 +5,24 @@ test('test number type', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 2, column: 0}},
             body:
                 [{
                     type: 'ExpressionStatement',
                     start: 0,
-                    expression: {type: 'Literal', start: 0, value: 123, raw: '123', end: 3},
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 3}},
+                    expression:
+                        {
+                            type: 'Literal',
+                            start: 0,
+                            loc:
+                                {start: {line: 1, column: 0}, end: {line: 1, column: 3}},
+                            value: 123,
+                            raw: '123',
+                            end: 3
+                        },
                     end: 3
                 }],
             end: 4
@@ -20,11 +33,24 @@ test('test number type', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 3}},
             body:
                 [{
                     type: 'ExpressionStatement',
                     start: 0,
-                    expression: {type: 'Literal', start: 0, value: 123, raw: '123', end: 3},
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 3}},
+                    expression:
+                        {
+                            type: 'Literal',
+                            start: 0,
+                            loc:
+                                {start: {line: 1, column: 0}, end: {line: 1, column: 3}},
+                            value: 123,
+                            raw: '123',
+                            end: 3
+                        },
                     end: 3
                 }],
             end: 3
@@ -35,11 +61,24 @@ test('test number type', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 5}},
             body:
                 [{
                     type: 'ExpressionStatement',
                     start: 0,
-                    expression: {type: 'Literal', start: 0, value: 1.23, raw: '1.230', end: 5},
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 5}},
+                    expression:
+                        {
+                            type: 'Literal',
+                            start: 0,
+                            loc:
+                                {start: {line: 1, column: 0}, end: {line: 1, column: 5}},
+                            value: 1.23,
+                            raw: '1.230',
+                            end: 5
+                        },
                     end: 5
                 }],
             end: 5

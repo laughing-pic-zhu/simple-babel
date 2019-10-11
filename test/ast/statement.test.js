@@ -5,31 +5,64 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
             body:
                 [{
                     type: 'VariableDeclaration',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
                     kind: 'var',
                     declarations:
-                        [
-                            {
-                                type: 'VariableDeclarator',
-                                start: 4,
-                                id: {type: 'Identifier', start: 4, name: 'a', end: 5},
-                                init: null,
-                                end: 5
-                            },
+                        [{
+                            type: 'VariableDeclarator',
+                            start: 4,
+                            loc:
+                                {start: {line: 1, column: 4}, end: {line: 1, column: 5}},
+                            id:
+                                {
+                                    type: 'Identifier',
+                                    start: 4,
+                                    loc:
+                                        {start: {line: 1, column: 4}, end: {line: 1, column: 5}},
+                                    name: 'a',
+                                    end: 5
+                                },
+                            init: null,
+                            end: 5
+                        },
                             {
                                 type: 'VariableDeclarator',
                                 start: 6,
-                                id: {type: 'Identifier', start: 6, name: 'b', end: 7},
+                                loc:
+                                    {start: {line: 1, column: 6}, end: {line: 1, column: 7}},
+                                id:
+                                    {
+                                        type: 'Identifier',
+                                        start: 6,
+                                        loc:
+                                            {start: {line: 1, column: 6}, end: {line: 1, column: 7}},
+                                        name: 'b',
+                                        end: 7
+                                    },
                                 init: null,
                                 end: 7
                             },
                             {
                                 type: 'VariableDeclarator',
                                 start: 8,
-                                id: {type: 'Identifier', start: 8, name: 'c', end: 9},
+                                loc:
+                                    {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                id:
+                                    {
+                                        type: 'Identifier',
+                                        start: 8,
+                                        loc:
+                                            {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                        name: 'c',
+                                        end: 9
+                                    },
                                 init: null,
                                 end: 9
                             }],
@@ -43,37 +76,95 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
             body:
                 [{
                     type: 'FunctionDeclaration',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
+                    id:
+                        {
+                            type: 'Identifier',
+                            start: 9,
+                            loc:
+                                {start: {line: 1, column: 9}, end: {line: 1, column: 10}},
+                            name: 'a',
+                            end: 10
+                        },
+                    params:
+                        [{
+                            type: 'Identifier',
+                            start: 11,
+                            loc:
+                                {start: {line: 1, column: 11}, end: {line: 1, column: 12}},
+                            name: 'b',
+                            end: 12
+                        },
+                            {
+                                type: 'Identifier',
+                                start: 13,
+                                loc:
+                                    {start: {line: 1, column: 13}, end: {line: 1, column: 14}},
+                                name: 'c',
+                                end: 14
+                            }],
                     expression: false,
                     generator: false,
-                    id: {type: 'Identifier', start: 9, name: 'a', end: 10},
-                    params:
-                        [{type: 'Identifier', start: 11, name: 'b', end: 12},
-                            {type: 'Identifier', start: 13, name: 'c', end: 14}],
                     body:
                         {
                             type: 'BlockStatement',
                             start: 15,
+                            loc:
+                                {start: {line: 1, column: 15}, end: {line: 3, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 17,
-                                    expression: {type: 'Identifier', start: 17, name: 'e', end: 18},
+                                    loc:
+                                        {start: {line: 2, column: 0}, end: {line: 2, column: 2}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 17,
+                                            loc:
+                                                {start: {line: 2, column: 0}, end: {line: 2, column: 1}},
+                                            name: 'e',
+                                            end: 18
+                                        },
                                     end: 19
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 19,
-                                        expression: {type: 'Identifier', start: 19, name: 'f', end: 20},
+                                        loc:
+                                            {start: {line: 2, column: 2}, end: {line: 2, column: 4}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 19,
+                                                loc:
+                                                    {start: {line: 2, column: 2}, end: {line: 2, column: 3}},
+                                                name: 'f',
+                                                end: 20
+                                            },
                                         end: 21
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 21,
-                                        expression: {type: 'Identifier', start: 21, name: 'g', end: 22},
+                                        loc:
+                                            {start: {line: 2, column: 4}, end: {line: 2, column: 6}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 21,
+                                                loc:
+                                                    {start: {line: 2, column: 4}, end: {line: 2, column: 5}},
+                                                name: 'g',
+                                                end: 22
+                                            },
                                         end: 23
                                     }],
                             end: 25
@@ -88,27 +179,61 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 7}},
             body:
                 [{
                     type: 'BlockStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 7}},
                     body:
                         [{
                             type: 'ExpressionStatement',
                             start: 1,
-                            expression: {type: 'Identifier', start: 1, name: 'e', end: 2},
+                            loc:
+                                {start: {line: 1, column: 1}, end: {line: 1, column: 3}},
+                            expression:
+                                {
+                                    type: 'Identifier',
+                                    start: 1,
+                                    loc:
+                                        {start: {line: 1, column: 1}, end: {line: 1, column: 2}},
+                                    name: 'e',
+                                    end: 2
+                                },
                             end: 3
                         },
                             {
                                 type: 'ExpressionStatement',
                                 start: 3,
-                                expression: {type: 'Identifier', start: 3, name: 'f', end: 4},
+                                loc:
+                                    {start: {line: 1, column: 3}, end: {line: 1, column: 5}},
+                                expression:
+                                    {
+                                        type: 'Identifier',
+                                        start: 3,
+                                        loc:
+                                            {start: {line: 1, column: 3}, end: {line: 1, column: 4}},
+                                        name: 'f',
+                                        end: 4
+                                    },
                                 end: 5
                             },
                             {
                                 type: 'ExpressionStatement',
                                 start: 5,
-                                expression: {type: 'Identifier', start: 5, name: 'g', end: 6},
+                                loc:
+                                    {start: {line: 1, column: 5}, end: {line: 1, column: 6}},
+                                expression:
+                                    {
+                                        type: 'Identifier',
+                                        start: 5,
+                                        loc:
+                                            {start: {line: 1, column: 5}, end: {line: 1, column: 6}},
+                                        name: 'g',
+                                        end: 6
+                                    },
                                 end: 6
                             }],
                     end: 7
@@ -121,23 +246,48 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
             body:
                 [{
                     type: 'FunctionDeclaration',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
+                    id:
+                        {
+                            type: 'Identifier',
+                            start: 9,
+                            loc:
+                                {start: {line: 1, column: 9}, end: {line: 1, column: 10}},
+                            name: 'a',
+                            end: 10
+                        },
+                    params: [],
                     expression: false,
                     generator: false,
-                    id: {type: 'Identifier', start: 9, name: 'a', end: 10},
-                    params: [],
                     body:
                         {
                             type: 'BlockStatement',
                             start: 12,
+                            loc:
+                                {start: {line: 1, column: 12}, end: {line: 3, column: 1}},
                             body:
                                 [{
                                     type: 'ReturnStatement',
                                     start: 14,
-                                    argument: {type: 'Literal', start: 21, value: 1, raw: '1', end: 22},
+                                    loc:
+                                        {start: {line: 2, column: 0}, end: {line: 2, column: 9}},
+                                    argument:
+                                        {
+                                            type: 'Literal',
+                                            start: 21,
+                                            loc:
+                                                {start: {line: 2, column: 7}, end: {line: 2, column: 8}},
+                                            value: 1,
+                                            raw: '1',
+                                            end: 22
+                                        },
                                     end: 23
                                 }],
                             end: 25
@@ -152,16 +302,38 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
             body:
                 [{
                     type: 'ThrowStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
                     argument:
                         {
-                            start: 6,
                             type: 'MemberExpression',
-                            object: {type: 'Identifier', start: 6, name: 'a', end: 7},
-                            property: {type: 'Identifier', start: 8, name: 'b', end: 9},
+                            start: 6,
+                            loc:
+                                {start: {line: 1, column: 6}, end: {line: 1, column: 9}},
+                            object:
+                                {
+                                    type: 'Identifier',
+                                    start: 6,
+                                    loc:
+                                        {start: {line: 1, column: 6}, end: {line: 1, column: 9}},
+                                    name: 'a',
+                                    end: 7
+                                },
+                            property:
+                                {
+                                    type: 'Identifier',
+                                    start: 8,
+                                    loc:
+                                        {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                    name: 'b',
+                                    end: 9
+                                },
                             computed: false,
                             end: 9
                         },
@@ -176,20 +348,44 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 7, column: 1}},
             body:
                 [{
                     type: 'IfStatement',
                     start: 0,
-                    test: {type: 'Identifier', start: 3, name: 'a', end: 4},
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 7, column: 1}},
+                    test:
+                        {
+                            type: 'Identifier',
+                            start: 3,
+                            loc:
+                                {start: {line: 1, column: 3}, end: {line: 1, column: 4}},
+                            name: 'a',
+                            end: 4
+                        },
                     consequent:
                         {
                             type: 'BlockStatement',
                             start: 5,
+                            loc:
+                                {start: {line: 1, column: 5}, end: {line: 3, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 8,
-                                    expression: {type: 'Identifier', start: 8, name: 'e', end: 9},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 8,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 9
+                                        },
                                     end: 9
                                 }],
                             end: 11
@@ -198,16 +394,38 @@ test('test statement', () => {
                         {
                             type: 'IfStatement',
                             start: 16,
-                            test: {type: 'Identifier', start: 19, name: 'b', end: 20},
+                            loc:
+                                {start: {line: 3, column: 6}, end: {line: 7, column: 1}},
+                            test:
+                                {
+                                    type: 'Identifier',
+                                    start: 19,
+                                    loc:
+                                        {start: {line: 3, column: 9}, end: {line: 3, column: 10}},
+                                    name: 'b',
+                                    end: 20
+                                },
                             consequent:
                                 {
                                     type: 'BlockStatement',
                                     start: 21,
+                                    loc:
+                                        {start: {line: 3, column: 11}, end: {line: 5, column: 1}},
                                     body:
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 24,
-                                            expression: {type: 'Identifier', start: 24, name: 'f', end: 25},
+                                            loc:
+                                                {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 24,
+                                                    loc:
+                                                        {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                    name: 'f',
+                                                    end: 25
+                                                },
                                             end: 25
                                         }],
                                     end: 27
@@ -216,11 +434,23 @@ test('test statement', () => {
                                 {
                                     type: 'BlockStatement',
                                     start: 31,
+                                    loc:
+                                        {start: {line: 5, column: 5}, end: {line: 7, column: 1}},
                                     body:
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 34,
-                                            expression: {type: 'Identifier', start: 34, name: 'g', end: 35},
+                                            loc:
+                                                {start: {line: 6, column: 1}, end: {line: 6, column: 2}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 34,
+                                                    loc:
+                                                        {start: {line: 6, column: 1}, end: {line: 6, column: 2}},
+                                                    name: 'g',
+                                                    end: 35
+                                                },
                                             end: 35
                                         }],
                                     end: 37
@@ -237,33 +467,85 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 9, column: 1}},
             body:
                 [{
                     type: 'SwitchStatement',
                     start: 0,
-                    discriminant: {type: 'Identifier', start: 7, name: 'a', end: 8},
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 9, column: 1}},
+                    discriminant:
+                        {
+                            type: 'Identifier',
+                            start: 7,
+                            loc:
+                                {start: {line: 1, column: 7}, end: {line: 1, column: 8}},
+                            name: 'a',
+                            end: 8
+                        },
                     cases:
                         [{
                             type: 'SwitchCase',
                             start: 12,
-                            test: {type: 'Identifier', start: 17, name: 'b', end: 18},
+                            loc:
+                                {start: {line: 2, column: 1}, end: {line: 3, column: 8}},
+                            test:
+                                {
+                                    type: 'Identifier',
+                                    start: 17,
+                                    loc:
+                                        {start: {line: 2, column: 6}, end: {line: 2, column: 7}},
+                                    name: 'b',
+                                    end: 18
+                                },
                             consequent:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 23,
-                                    expression: {type: 'Identifier', start: 23, name: 'e', end: 24},
+                                    loc:
+                                        {start: {line: 3, column: 2}, end: {line: 3, column: 4}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 23,
+                                            loc:
+                                                {start: {line: 3, column: 2}, end: {line: 3, column: 3}},
+                                            name: 'e',
+                                            end: 24
+                                        },
                                     end: 25
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 25,
-                                        expression: {type: 'Identifier', start: 25, name: 'f', end: 26},
+                                        loc:
+                                            {start: {line: 3, column: 4}, end: {line: 3, column: 6}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 25,
+                                                loc:
+                                                    {start: {line: 3, column: 4}, end: {line: 3, column: 5}},
+                                                name: 'f',
+                                                end: 26
+                                            },
                                         end: 27
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 27,
-                                        expression: {type: 'Identifier', start: 27, name: 'g', end: 28},
+                                        loc:
+                                            {start: {line: 3, column: 6}, end: {line: 3, column: 8}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 27,
+                                                loc:
+                                                    {start: {line: 3, column: 6}, end: {line: 3, column: 7}},
+                                                name: 'g',
+                                                end: 28
+                                            },
                                         end: 29
                                     }],
                             end: 29
@@ -271,31 +553,81 @@ test('test statement', () => {
                             {
                                 type: 'SwitchCase',
                                 start: 32,
-                                test: {type: 'Identifier', start: 37, name: 'c', end: 38},
+                                loc:
+                                    {start: {line: 4, column: 1}, end: {line: 4, column: 8}},
+                                test:
+                                    {
+                                        type: 'Identifier',
+                                        start: 37,
+                                        loc:
+                                            {start: {line: 4, column: 6}, end: {line: 4, column: 7}},
+                                        name: 'c',
+                                        end: 38
+                                    },
                                 consequent: [],
                                 end: 39
                             },
                             {
                                 type: 'SwitchCase',
                                 start: 41,
-                                test: {type: 'Identifier', start: 46, name: 'd', end: 47},
+                                loc:
+                                    {start: {line: 5, column: 1}, end: {line: 6, column: 8}},
+                                test:
+                                    {
+                                        type: 'Identifier',
+                                        start: 46,
+                                        loc:
+                                            {start: {line: 5, column: 6}, end: {line: 5, column: 7}},
+                                        name: 'd',
+                                        end: 47
+                                    },
                                 consequent:
                                     [{
                                         type: 'ExpressionStatement',
                                         start: 51,
-                                        expression: {type: 'Identifier', start: 51, name: 'e', end: 52},
+                                        loc:
+                                            {start: {line: 6, column: 2}, end: {line: 6, column: 4}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 51,
+                                                loc:
+                                                    {start: {line: 6, column: 2}, end: {line: 6, column: 3}},
+                                                name: 'e',
+                                                end: 52
+                                            },
                                         end: 53
                                     },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 53,
-                                            expression: {type: 'Identifier', start: 53, name: 'f', end: 54},
+                                            loc:
+                                                {start: {line: 6, column: 4}, end: {line: 6, column: 6}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 53,
+                                                    loc:
+                                                        {start: {line: 6, column: 4}, end: {line: 6, column: 5}},
+                                                    name: 'f',
+                                                    end: 54
+                                                },
                                             end: 55
                                         },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 55,
-                                            expression: {type: 'Identifier', start: 55, name: 'g', end: 56},
+                                            loc:
+                                                {start: {line: 6, column: 6}, end: {line: 6, column: 8}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 55,
+                                                    loc:
+                                                        {start: {line: 6, column: 6}, end: {line: 6, column: 7}},
+                                                    name: 'g',
+                                                    end: 56
+                                                },
                                             end: 57
                                         }],
                                 end: 57
@@ -303,24 +635,56 @@ test('test statement', () => {
                             {
                                 type: 'SwitchCase',
                                 start: 60,
+                                loc:
+                                    {start: {line: 7, column: 1}, end: {line: 8, column: 8}},
                                 test: null,
                                 consequent:
                                     [{
                                         type: 'ExpressionStatement',
                                         start: 71,
-                                        expression: {type: 'Identifier', start: 71, name: 'e', end: 72},
+                                        loc:
+                                            {start: {line: 8, column: 2}, end: {line: 8, column: 4}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 71,
+                                                loc:
+                                                    {start: {line: 8, column: 2}, end: {line: 8, column: 3}},
+                                                name: 'e',
+                                                end: 72
+                                            },
                                         end: 73
                                     },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 73,
-                                            expression: {type: 'Identifier', start: 73, name: 'f', end: 74},
+                                            loc:
+                                                {start: {line: 8, column: 4}, end: {line: 8, column: 6}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 73,
+                                                    loc:
+                                                        {start: {line: 8, column: 4}, end: {line: 8, column: 5}},
+                                                    name: 'f',
+                                                    end: 74
+                                                },
                                             end: 75
                                         },
                                         {
                                             type: 'ExpressionStatement',
                                             start: 75,
-                                            expression: {type: 'Identifier', start: 75, name: 'g', end: 76},
+                                            loc:
+                                                {start: {line: 8, column: 6}, end: {line: 8, column: 8}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 75,
+                                                    loc:
+                                                        {start: {line: 8, column: 6}, end: {line: 8, column: 7}},
+                                                    name: 'g',
+                                                    end: 76
+                                                },
                                             end: 77
                                         }],
                                 end: 77
@@ -335,10 +699,14 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
             body:
                 [{
                     type: 'ForStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
                     init: null,
                     test: null,
                     update: null,
@@ -346,7 +714,17 @@ test('test statement', () => {
                         {
                             type: 'BlockStatement',
                             start: 7,
-                            body: [{type: 'BreakStatement', start: 10, label: null, end: 16}],
+                            loc:
+                                {start: {line: 1, column: 7}, end: {line: 3, column: 1}},
+                            body:
+                                [{
+                                    type: 'BreakStatement',
+                                    start: 10,
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 7}},
+                                    label: null,
+                                    end: 16
+                                }],
                             end: 18
                         },
                     end: 18
@@ -358,10 +736,14 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
             body:
                 [{
                     type: 'ForStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 3, column: 1}},
                     init: null,
                     test: null,
                     update: null,
@@ -369,8 +751,17 @@ test('test statement', () => {
                         {
                             type: 'BlockStatement',
                             start: 7,
+                            loc:
+                                {start: {line: 1, column: 7}, end: {line: 3, column: 1}},
                             body:
-                                [{type: 'ContinueStatement', start: 10, label: null, end: 18}],
+                                [{
+                                    type: 'ContinueStatement',
+                                    start: 10,
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 9}},
+                                    label: null,
+                                    end: 18
+                                }],
                             end: 20
                         },
                     end: 20
@@ -382,7 +773,16 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
-            body: [{type: 'EmptyStatement', start: 0, end: 1}],
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 1}},
+            body:
+                [{
+                    type: 'EmptyStatement',
+                    start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 1}},
+                    end: 1
+                }],
             end: 1
         }
     )
@@ -390,20 +790,36 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
             body:
                 [{
                     type: 'ForStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
                     init:
                         {
                             type: 'VariableDeclaration',
                             start: 4,
+                            loc:
+                                {start: {line: 1, column: 4}, end: {line: 1, column: 9}},
                             kind: 'var',
                             declarations:
                                 [{
                                     type: 'VariableDeclarator',
                                     start: 8,
-                                    id: {type: 'Identifier', start: 8, name: 'a', end: 9},
+                                    loc:
+                                        {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                    id:
+                                        {
+                                            type: 'Identifier',
+                                            start: 8,
+                                            loc:
+                                                {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                            name: 'a',
+                                            end: 9
+                                        },
                                     init: null,
                                     end: 9
                                 }],
@@ -411,18 +827,46 @@ test('test statement', () => {
                         },
                     test:
                         {
-                            start: 10,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 10, name: 'a', end: 11},
+                            start: 10,
+                            loc:
+                                {start: {line: 1, column: 10}, end: {line: 1, column: 13}},
+                            left:
+                                {
+                                    type: 'Identifier',
+                                    start: 10,
+                                    loc:
+                                        {start: {line: 1, column: 10}, end: {line: 1, column: 13}},
+                                    name: 'a',
+                                    end: 11
+                                },
                             operator: '<',
-                            right: {type: 'Identifier', start: 12, name: 'b', end: 13},
+                            right:
+                                {
+                                    type: 'Identifier',
+                                    start: 12,
+                                    loc:
+                                        {start: {line: 1, column: 12}, end: {line: 1, column: 13}},
+                                    name: 'b',
+                                    end: 13
+                                },
                             end: 13
                         },
                     update:
                         {
-                            start: 14,
                             type: 'UpdateExpression',
-                            argument: {type: 'Identifier', start: 14, name: 'a', end: 15},
+                            start: 14,
+                            loc:
+                                {start: {line: 1, column: 14}, end: {line: 1, column: 17}},
+                            argument:
+                                {
+                                    type: 'Identifier',
+                                    start: 14,
+                                    loc:
+                                        {start: {line: 1, column: 14}, end: {line: 1, column: 17}},
+                                    name: 'a',
+                                    end: 15
+                                },
                             operator: '++',
                             prefix: false,
                             end: 17
@@ -431,23 +875,55 @@ test('test statement', () => {
                         {
                             type: 'BlockStatement',
                             start: 18,
+                            loc:
+                                {start: {line: 1, column: 18}, end: {line: 5, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 21,
-                                    expression: {type: 'Identifier', start: 21, name: 'e', end: 22},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 3}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 21,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 22
+                                        },
                                     end: 23
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 25,
-                                        expression: {type: 'Identifier', start: 25, name: 'f', end: 26},
+                                        loc:
+                                            {start: {line: 3, column: 1}, end: {line: 3, column: 3}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 25,
+                                                loc:
+                                                    {start: {line: 3, column: 1}, end: {line: 3, column: 2}},
+                                                name: 'f',
+                                                end: 26
+                                            },
                                         end: 27
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 29,
-                                        expression: {type: 'Identifier', start: 29, name: 'g', end: 30},
+                                        loc:
+                                            {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 29,
+                                                loc:
+                                                    {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                name: 'g',
+                                                end: 30
+                                            },
                                         end: 30
                                     }],
                             end: 32
@@ -461,47 +937,103 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
             body:
                 [{
                     type: 'ForInStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
                     left:
                         {
                             type: 'VariableDeclaration',
                             start: 4,
+                            loc:
+                                {start: {line: 1, column: 4}, end: {line: 1, column: 9}},
                             kind: 'var',
                             declarations:
                                 [{
                                     type: 'VariableDeclarator',
                                     start: 8,
-                                    id: {type: 'Identifier', start: 8, name: 'a', end: 9},
+                                    loc:
+                                        {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                    id:
+                                        {
+                                            type: 'Identifier',
+                                            start: 8,
+                                            loc:
+                                                {start: {line: 1, column: 8}, end: {line: 1, column: 9}},
+                                            name: 'a',
+                                            end: 9
+                                        },
                                     init: null,
                                     end: 9
                                 }],
                             end: 9
                         },
-                    right: {type: 'Identifier', start: 13, name: 'b', end: 14},
+                    right:
+                        {
+                            type: 'Identifier',
+                            start: 13,
+                            loc:
+                                {start: {line: 1, column: 13}, end: {line: 1, column: 14}},
+                            name: 'b',
+                            end: 14
+                        },
                     body:
                         {
                             type: 'BlockStatement',
                             start: 15,
+                            loc:
+                                {start: {line: 1, column: 15}, end: {line: 5, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 18,
-                                    expression: {type: 'Identifier', start: 18, name: 'e', end: 19},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 3}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 18,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 19
+                                        },
                                     end: 20
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 22,
-                                        expression: {type: 'Identifier', start: 22, name: 'f', end: 23},
+                                        loc:
+                                            {start: {line: 3, column: 1}, end: {line: 3, column: 3}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 22,
+                                                loc:
+                                                    {start: {line: 3, column: 1}, end: {line: 3, column: 2}},
+                                                name: 'f',
+                                                end: 23
+                                            },
                                         end: 24
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 26,
-                                        expression: {type: 'Identifier', start: 26, name: 'g', end: 27},
+                                        loc:
+                                            {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 26,
+                                                loc:
+                                                    {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                name: 'g',
+                                                end: 27
+                                            },
                                         end: 27
                                     }],
                             end: 29
@@ -515,40 +1047,94 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
             body:
                 [{
                     type: 'WhileStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 5, column: 1}},
                     test:
                         {
-                            start: 6,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 6, name: 'a', end: 7},
+                            start: 6,
+                            loc:
+                                {start: {line: 1, column: 6}, end: {line: 1, column: 11}},
+                            left:
+                                {
+                                    type: 'Identifier',
+                                    start: 6,
+                                    loc:
+                                        {start: {line: 1, column: 6}, end: {line: 1, column: 11}},
+                                    name: 'a',
+                                    end: 7
+                                },
                             operator: '===',
-                            right: {type: 'Identifier', start: 10, name: 'b', end: 11},
+                            right:
+                                {
+                                    type: 'Identifier',
+                                    start: 10,
+                                    loc:
+                                        {start: {line: 1, column: 10}, end: {line: 1, column: 11}},
+                                    name: 'b',
+                                    end: 11
+                                },
                             end: 11
                         },
                     body:
                         {
                             type: 'BlockStatement',
                             start: 12,
+                            loc:
+                                {start: {line: 1, column: 12}, end: {line: 5, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 15,
-                                    expression: {type: 'Identifier', start: 15, name: 'e', end: 16},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 3}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 15,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 16
+                                        },
                                     end: 17
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 19,
-                                        expression: {type: 'Identifier', start: 19, name: 'f', end: 20},
+                                        loc:
+                                            {start: {line: 3, column: 1}, end: {line: 3, column: 3}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 19,
+                                                loc:
+                                                    {start: {line: 3, column: 1}, end: {line: 3, column: 2}},
+                                                name: 'f',
+                                                end: 20
+                                            },
                                         end: 21
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 23,
-                                        expression: {type: 'Identifier', start: 23, name: 'g', end: 24},
+                                        loc:
+                                            {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 23,
+                                                loc:
+                                                    {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                name: 'g',
+                                                end: 24
+                                            },
                                         end: 24
                                     }],
                             end: 26
@@ -562,42 +1148,96 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 5, column: 13}},
             body:
                 [{
                     type: 'DoWhileStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 5, column: 13}},
                     body:
                         {
                             type: 'BlockStatement',
                             start: 2,
+                            loc:
+                                {start: {line: 1, column: 2}, end: {line: 5, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 5,
-                                    expression: {type: 'Identifier', start: 5, name: 'e', end: 6},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 3}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 5,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 6
+                                        },
                                     end: 7
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 9,
-                                        expression: {type: 'Identifier', start: 9, name: 'f', end: 10},
+                                        loc:
+                                            {start: {line: 3, column: 1}, end: {line: 3, column: 3}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 9,
+                                                loc:
+                                                    {start: {line: 3, column: 1}, end: {line: 3, column: 2}},
+                                                name: 'f',
+                                                end: 10
+                                            },
                                         end: 11
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 13,
-                                        expression: {type: 'Identifier', start: 13, name: 'g', end: 14},
+                                        loc:
+                                            {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 13,
+                                                loc:
+                                                    {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                name: 'g',
+                                                end: 14
+                                            },
                                         end: 14
                                     }],
                             end: 16
                         },
                     test:
                         {
-                            start: 22,
                             type: 'BinaryExpression',
-                            left: {type: 'Identifier', start: 22, name: 'a', end: 23},
+                            start: 22,
+                            loc:
+                                {start: {line: 5, column: 7}, end: {line: 5, column: 12}},
+                            left:
+                                {
+                                    type: 'Identifier',
+                                    start: 22,
+                                    loc:
+                                        {start: {line: 5, column: 7}, end: {line: 5, column: 12}},
+                                    name: 'a',
+                                    end: 23
+                                },
                             operator: '===',
-                            right: {type: 'Identifier', start: 26, name: 'b', end: 27},
+                            right:
+                                {
+                                    type: 'Identifier',
+                                    start: 26,
+                                    loc:
+                                        {start: {line: 5, column: 11}, end: {line: 5, column: 12}},
+                                    name: 'b',
+                                    end: 27
+                                },
                             end: 27
                         },
                     end: 28
@@ -610,7 +1250,16 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
-            body: [{type: 'DebuggerStatement', start: 0, end: 9}],
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
+            body:
+                [{
+                    type: 'DebuggerStatement',
+                    start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 9}},
+                    end: 9
+                }],
             end: 9
         }
     )
@@ -619,31 +1268,67 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 13, column: 1}},
             body:
                 [{
                     type: 'TryStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 13, column: 1}},
                     block:
                         {
                             type: 'BlockStatement',
                             start: 3,
+                            loc:
+                                {start: {line: 1, column: 3}, end: {line: 5, column: 1}},
                             body:
                                 [{
                                     type: 'ExpressionStatement',
                                     start: 6,
-                                    expression: {type: 'Identifier', start: 6, name: 'e', end: 7},
+                                    loc:
+                                        {start: {line: 2, column: 1}, end: {line: 2, column: 3}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 6,
+                                            loc:
+                                                {start: {line: 2, column: 1}, end: {line: 2, column: 2}},
+                                            name: 'e',
+                                            end: 7
+                                        },
                                     end: 8
                                 },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 10,
-                                        expression: {type: 'Identifier', start: 10, name: 'f', end: 11},
+                                        loc:
+                                            {start: {line: 3, column: 1}, end: {line: 3, column: 3}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 10,
+                                                loc:
+                                                    {start: {line: 3, column: 1}, end: {line: 3, column: 2}},
+                                                name: 'f',
+                                                end: 11
+                                            },
                                         end: 12
                                     },
                                     {
                                         type: 'ExpressionStatement',
                                         start: 14,
-                                        expression: {type: 'Identifier', start: 14, name: 'g', end: 15},
+                                        loc:
+                                            {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                        expression:
+                                            {
+                                                type: 'Identifier',
+                                                start: 14,
+                                                loc:
+                                                    {start: {line: 4, column: 1}, end: {line: 4, column: 2}},
+                                                name: 'g',
+                                                end: 15
+                                            },
                                         end: 15
                                     }],
                             end: 17
@@ -652,28 +1337,70 @@ test('test statement', () => {
                         {
                             type: 'CatchClause',
                             start: 17,
-                            param: {type: 'Identifier', start: 23, name: 'e', end: 24},
+                            loc:
+                                {start: {line: 5, column: 1}, end: {line: 9, column: 1}},
+                            param:
+                                {
+                                    type: 'Identifier',
+                                    start: 23,
+                                    loc:
+                                        {start: {line: 5, column: 7}, end: {line: 5, column: 8}},
+                                    name: 'e',
+                                    end: 24
+                                },
                             body:
                                 {
                                     type: 'BlockStatement',
                                     start: 25,
+                                    loc:
+                                        {start: {line: 5, column: 9}, end: {line: 9, column: 1}},
                                     body:
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 28,
-                                            expression: {type: 'Identifier', start: 28, name: 'e', end: 29},
+                                            loc:
+                                                {start: {line: 6, column: 1}, end: {line: 6, column: 3}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 28,
+                                                    loc:
+                                                        {start: {line: 6, column: 1}, end: {line: 6, column: 2}},
+                                                    name: 'e',
+                                                    end: 29
+                                                },
                                             end: 30
                                         },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 32,
-                                                expression: {type: 'Identifier', start: 32, name: 'f', end: 33},
+                                                loc:
+                                                    {start: {line: 7, column: 1}, end: {line: 7, column: 3}},
+                                                expression:
+                                                    {
+                                                        type: 'Identifier',
+                                                        start: 32,
+                                                        loc:
+                                                            {start: {line: 7, column: 1}, end: {line: 7, column: 2}},
+                                                        name: 'f',
+                                                        end: 33
+                                                    },
                                                 end: 34
                                             },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 36,
-                                                expression: {type: 'Identifier', start: 36, name: 'g', end: 37},
+                                                loc:
+                                                    {start: {line: 8, column: 1}, end: {line: 8, column: 2}},
+                                                expression:
+                                                    {
+                                                        type: 'Identifier',
+                                                        start: 36,
+                                                        loc:
+                                                            {start: {line: 8, column: 1}, end: {line: 8, column: 2}},
+                                                        name: 'g',
+                                                        end: 37
+                                                    },
                                                 end: 37
                                             }],
                                     end: 39
@@ -684,27 +1411,61 @@ test('test statement', () => {
                         {
                             type: 'BlockStatement',
                             start: 46,
+                            loc:
+                                {start: {line: 9, column: 8}, end: {line: 13, column: 1}},
                             body:
                                 {
                                     type: 'BlockStatement',
                                     start: 46,
+                                    loc:
+                                        {start: {line: 9, column: 8}, end: {line: 13, column: 1}},
                                     body:
                                         [{
                                             type: 'ExpressionStatement',
                                             start: 49,
-                                            expression: {type: 'Identifier', start: 49, name: 'e', end: 50},
+                                            loc:
+                                                {start: {line: 10, column: 1}, end: {line: 10, column: 3}},
+                                            expression:
+                                                {
+                                                    type: 'Identifier',
+                                                    start: 49,
+                                                    loc:
+                                                        {start: {line: 10, column: 1}, end: {line: 10, column: 2}},
+                                                    name: 'e',
+                                                    end: 50
+                                                },
                                             end: 51
                                         },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 53,
-                                                expression: {type: 'Identifier', start: 53, name: 'f', end: 54},
+                                                loc:
+                                                    {start: {line: 11, column: 1}, end: {line: 11, column: 3}},
+                                                expression:
+                                                    {
+                                                        type: 'Identifier',
+                                                        start: 53,
+                                                        loc:
+                                                            {start: {line: 11, column: 1}, end: {line: 11, column: 2}},
+                                                        name: 'f',
+                                                        end: 54
+                                                    },
                                                 end: 55
                                             },
                                             {
                                                 type: 'ExpressionStatement',
                                                 start: 57,
-                                                expression: {type: 'Identifier', start: 57, name: 'g', end: 58},
+                                                loc:
+                                                    {start: {line: 12, column: 1}, end: {line: 12, column: 2}},
+                                                expression:
+                                                    {
+                                                        type: 'Identifier',
+                                                        start: 57,
+                                                        loc:
+                                                            {start: {line: 12, column: 1}, end: {line: 12, column: 2}},
+                                                        name: 'g',
+                                                        end: 58
+                                                    },
                                                 end: 58
                                             }],
                                     end: 60
@@ -721,20 +1482,44 @@ test('test statement', () => {
         {
             type: 'Program',
             start: 0,
+            loc:
+                {start: {line: 1, column: 0}, end: {line: 1, column: 5}},
             body:
                 [{
                     type: 'BlockStatement',
                     start: 0,
+                    loc:
+                        {start: {line: 1, column: 0}, end: {line: 1, column: 5}},
                     body:
                         [{
                             type: 'LabeledStatement',
                             start: 1,
-                            label: {type: 'Identifier', start: 1, name: 'a', end: 2},
+                            loc:
+                                {start: {line: 1, column: 1}, end: {line: 1, column: 4}},
+                            label:
+                                {
+                                    type: 'Identifier',
+                                    start: 1,
+                                    loc:
+                                        {start: {line: 1, column: 1}, end: {line: 1, column: 2}},
+                                    name: 'a',
+                                    end: 2
+                                },
                             body:
                                 {
                                     type: 'ExpressionStatement',
                                     start: 3,
-                                    expression: {type: 'Identifier', start: 3, name: 'b', end: 4},
+                                    loc:
+                                        {start: {line: 1, column: 3}, end: {line: 1, column: 4}},
+                                    expression:
+                                        {
+                                            type: 'Identifier',
+                                            start: 3,
+                                            loc:
+                                                {start: {line: 1, column: 3}, end: {line: 1, column: 4}},
+                                            name: 'b',
+                                            end: 4
+                                        },
                                     end: 4
                                 },
                             end: 4

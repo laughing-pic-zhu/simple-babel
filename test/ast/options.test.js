@@ -2,54 +2,35 @@ const acorn = require('../../lib/acorn');
 
 test('test option', () => {
     expect(acorn.parse('FUNCTION.bind(this)', {loc: false})).toEqual(
-        {
-            type: 'Program',
+        { type: 'Program',
+            loc:
+                { start: { line: 1, column: 0 }, end: { line: 1, column: 19 } },
             body:
-                [{
-                    type: 'ExpressionStatement',
+                [ { type: 'ExpressionStatement',
+                    loc:
+                        { start: { line: 1, column: 0 }, end: { line: 1, column: 19 } },
                     expression:
-                        {
-                            type: 'CallExpression',
-                            arguments: [{type: 'ThisExpression'}],
+                        { type: 'CallExpression',
+                            loc:
+                                { start: { line: 1, column: 0 }, end: { line: 1, column: 19 } },
+                            arguments:
+                                [ { type: 'ThisExpression',
+                                    loc:
+                                        { start: { line: 1, column: 14 }, end: { line: 1, column: 18 } } } ],
                             callee:
-                                {
-                                    type: 'MemberExpression',
-                                    object: {type: 'Identifier', name: 'FUNCTION'},
-                                    property: {type: 'Identifier', name: 'bind'},
-                                    computed: false
-                                }
-                        }
-                }]
-        }
-    );
-
-    expect(acorn.parse('FUNCTION.bind(this)')).toEqual(
-        {
-            type: 'Program',
-            start: 0,
-            body:
-                [{
-                    type: 'ExpressionStatement',
-                    start: 0,
-                    expression:
-                        {
-                            type: 'CallExpression',
-                            start: 0,
-                            arguments: [{type: 'ThisExpression', start: 14, end: 18}],
-                            callee:
-                                {
-                                    type: 'MemberExpression',
-                                    start: 0,
-                                    object: {type: 'Identifier', start: 0, name: 'FUNCTION', end: 8},
-                                    property: {type: 'Identifier', start: 9, name: 'bind', end: 13},
-                                    computed: false,
-                                    end: 13
-                                },
-                            end: 19
-                        },
-                    end: 19
-                }],
-            end: 19
-        }
+                                { type: 'MemberExpression',
+                                    loc:
+                                        { start: { line: 1, column: 0 }, end: { line: 1, column: 19 } },
+                                    object:
+                                        { type: 'Identifier',
+                                            loc:
+                                                { start: { line: 1, column: 0 }, end: { line: 1, column: 19 } },
+                                            name: 'FUNCTION' },
+                                    property:
+                                        { type: 'Identifier',
+                                            loc:
+                                                { start: { line: 1, column: 9 }, end: { line: 1, column: 13 } },
+                                            name: 'bind' },
+                                    computed: false } } } ] }
     );
 })
