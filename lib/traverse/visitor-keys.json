@@ -76,5 +76,14 @@
   "Property": [
     "key",
     "value"
+  ],
+  "TryStatement": [
+    "block",
+    "handler",
+    "finalizer"
+  ],
+  "CatchClause": [
+    "param",
+    "body"
   ]
 }
